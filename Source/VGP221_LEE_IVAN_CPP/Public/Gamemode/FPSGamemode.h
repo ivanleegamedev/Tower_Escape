@@ -14,4 +14,6 @@ class VGP221_LEE_IVAN_CPP_API AFPSGamemode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void StartPlay() override;
 };
