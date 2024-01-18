@@ -5,12 +5,20 @@
 
 void AFPSGamemode::StartPlay()
 {
-	Super::StartPlay();
+	Super::StartPlay(); // Calls base function similar to the base function in Unity.
 
-	// Log to Screen
+	if (GEngine != nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Starting FPS Map")));
+	}
+
 	// C Assert
-	check(GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Starting FPS Map")));
+	// If this fails throw an error
+	// check(GEngine != nullptr)
+	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Starting FPS Map")));
 
-	UE_LOG(LogTemp, Warning, TEXT("Starting FPS Map"));
+	// int test = 10;
+	// bool boolTest = true;
+	// UE_LOG(LogTemp, Warning, TEXT("Starting FPS Map %i %d"), boolTest, test);
+
+	// UE_LOGFMT(LogTemp, Warning, "This is an int {TheInt}", ("TheInt", test));
 }
