@@ -80,11 +80,15 @@ void AFPSProjectile::Tick(float DeltaTime)
 
 void AFPSProjectile::FireInDirection(const FVector& ShootDirection)
 {
+    // 1. FVector ShootDirection: Pass by value, least effecient
+    // 2. FVector& OutShootDirection: Basically an out. Will change the variable outside this scope
+    // 3. Const FVector& OutShootDirection: Pass by memory, but we can't directly change the paremeter
     ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
 
 void AFPSProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
+    // Collision with only physics objects
     if (OtherActor != this && OtherComponent->IsSimulatingPhysics())
     {
         OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
