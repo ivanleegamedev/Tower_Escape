@@ -103,6 +103,16 @@ void AFPSCharacter::EndJump()
 
 void AFPSCharacter::Fire()
 {
+	// Easy way to access the game mode
+	AFPSGamemode* Gamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (Gamemode) {
+		Health -= 10;
+		float HealthPercent = Health / MaxHealth;
+
+		Gamemode->CurrentWidget->SetHealthBar(HealthPercent);
+	}
+
+	// Rest of the fire code
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Player Fired Pressed")));
 	// Attempt to fire a projectile.
 	if (ProjectileClass)

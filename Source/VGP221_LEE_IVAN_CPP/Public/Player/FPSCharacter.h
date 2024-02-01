@@ -7,6 +7,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Projectiles/FPSProjectile.h"
+#include "Kismet/GameplayStatics.h"
+#include "Gamemode/FPSGamemode.h"
 #include "FPSCharacter.generated.h"
 
 
@@ -37,6 +39,10 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* FPSCameraComponent;
 
+	// Gun muzzle offset from the camera location.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FVector MuzzleOffset;
+
 	// First-person mesh (arms), visible only to the owning player.
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* FPSMesh;
@@ -57,7 +63,7 @@ public:
 	UFUNCTION()
 	void Fire();
 
-	// Gun muzzle offset from the camera location.
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	FVector MuzzleOffset;
+	// Temp health code
+	float Health = 100.0f;
+	const float MaxHealth = 100.0f;
 };
