@@ -113,7 +113,7 @@ void AFPSCharacter::Fire()
 	}
 
 	// Rest of the fire code
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Player Fired Pressed")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Player Fired Pressed")));
 	// Attempt to fire a projectile.
 	if (ProjectileClass)
 	{
