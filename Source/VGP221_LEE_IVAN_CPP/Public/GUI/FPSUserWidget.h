@@ -22,13 +22,13 @@ public:
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(meta = (BindWidget))
-	UProgressBar* HealthBar;
+	UProgressBar* HealthBar; // Make sure that "HealthBar" name matches the name of the HealthBar in the Widget
 
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* ScoreText;
+	UTextBlock* ScoreText; // Make sure that "ScoreText" name matches the name of the HealthBar in the Widget
 
 	UPROPERTY(meta = (BindWidget))
-	UVerticalBox* ButtonContainer;
+	UVerticalBox* ButtonContainer; // Make sure that "ButtonContainer" name matches the name of the HealthBar in the Widget
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UButtonWidget> ButtonWidgetPrefab;
