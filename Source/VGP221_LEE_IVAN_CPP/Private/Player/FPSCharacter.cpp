@@ -42,6 +42,9 @@ AFPSCharacter::AFPSCharacter()
 
 	// The owning player doesn't see the regular (third-person) body mesh.
 	GetMesh()->SetOwnerNoSee(true);
+
+	// Set up the health component.
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -105,9 +108,10 @@ void AFPSCharacter::Fire()
 {
 	// Easy way to access the game mode
 	AFPSGamemode* Gamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (Gamemode) {
-		Health -= 10;
-		float HealthPercent = Health / MaxHealth;
+	if (HealthComponent) 
+	{
+		HealthComponent->TakeDamage(10.0f);
+		float HealthPercent = HealthComponent->CurrentHealth / HealthComponent->MaxHealth;
 
 		Gamemode->CurrentWidget->SetHealthBar(HealthPercent);
 	}
@@ -148,5 +152,9 @@ void AFPSCharacter::Fire()
 				Projectile->FireInDirection(LaunchDirection);
 			}
 		}
+	}
+	else 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No Projectile class set for FPSCharacter!"))
 	}
 }

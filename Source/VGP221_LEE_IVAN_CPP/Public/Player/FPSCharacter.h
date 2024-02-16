@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -9,6 +7,7 @@
 #include "Projectiles/FPSProjectile.h"
 #include "Kismet/GameplayStatics.h"
 #include "Gamemode/FPSGamemode.h"
+#include "HealthComponent/HealthComponent.h"
 #include "FPSCharacter.generated.h"
 
 
@@ -40,11 +39,11 @@ public:
 	UCameraComponent* FPSCameraComponent;
 
 	// Gun muzzle offset from the camera location.
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	FVector MuzzleOffset;
 
 	// First-person mesh (arms), visible only to the owning player.
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+	UPROPERTY(VisibleDefaultsOnly, Category = "Mesh")
 	USkeletalMeshComponent* FPSMesh;
 
 	UFUNCTION()
@@ -63,7 +62,6 @@ public:
 	UFUNCTION()
 	void Fire();
 
-	// Temp health code
-	float Health = 100.0f;
-	const float MaxHealth = 100.0f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	UHealthComponent* HealthComponent;
 };

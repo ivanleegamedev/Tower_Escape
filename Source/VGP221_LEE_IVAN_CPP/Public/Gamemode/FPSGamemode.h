@@ -19,7 +19,7 @@ class VGP221_LEE_IVAN_CPP_API AFPSGamemode : public AGameModeBase
 public:
 	virtual void StartPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GUI")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GUI")
 	TSubclassOf<UFPSUserWidget> UserWidgetPrefab;
 
 	UFUNCTION()
