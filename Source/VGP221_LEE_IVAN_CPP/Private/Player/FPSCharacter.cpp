@@ -33,15 +33,6 @@ void AFPSCharacter::BeginPlay()
 	check(GEngine != nullptr)
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Spawning FPSCharacter")));
 
-	if (UserWidgetClass)
-	{
-		UserWidget = CreateWidget<UFPSUserWidget>(GetWorld(), UserWidgetClass);
-		if (UserWidget)
-		{
-			UserWidget->AddToViewport();
-		}
-	}
-
 	HealthComponent->OnHealthChanged.AddDynamic(this, &AFPSCharacter::OnHealthChanged);
 	HealthComponent->OnDeath.AddDynamic(this, &AFPSCharacter::OnCharacterDeath);
 }
@@ -141,7 +132,7 @@ void AFPSCharacter::TakeDamage_Implementation(float DamageAmount)
 		HealthComponent->TakeDamage(DamageAmount);
 
 		// Debug log ensuring the damage is being taken
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("TakeDamage_Implementation Called")));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("TakeDamage_Implementation Called")));
 	}
 }
 
@@ -153,14 +144,15 @@ void AFPSCharacter::HandleDeath_Implementation()
 
 void AFPSCharacter::OnHealthChanged(float NewHealthPercentage)
 {
-	if (UserWidget)
+	AFPSGamemode* FPSGamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (FPSGamemode && FPSGamemode->CurrentWidget)
 	{
-		UserWidget->SetHealthBar(NewHealthPercentage);
+		FPSGamemode->CurrentWidget->SetHealthBar(NewHealthPercentage);
 	}
 }
 
 void AFPSCharacter::OnCharacterDeath()
 {
 	// Call Game Over Screen
-	UE_LOG(LogTemp, Warning, TEXT("Character has died!"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Character has died!")));
 }

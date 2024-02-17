@@ -6,7 +6,6 @@
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "GUI/ButtonWidget.h"
-#include "HealthComponent/HealthComponent.h"
 #include "FPSUserWidget.generated.h"
 
 /**
@@ -37,9 +36,6 @@ public:
 
 	UFUNCTION()
 	void SetScore(int newScore);
-
-	//UFUNCTION()
-	//void OnHealthUpdated(UHealthComponent* Sender, float NewHealth);
 
 private:
 	UPROPERTY()

@@ -2,7 +2,6 @@
 
 ACoin::ACoin()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	if (!CoinMesh)
@@ -28,7 +27,7 @@ void ACoin::OnCollect()
 {
 	Super::OnCollect();
 
-	UE_LOG(LogTemp, Warning, TEXT("Coin OnCollect Called"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Coin OnCollect Called")));
 
 	GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &ACoin::DeathTimerComplete, 0.5f, false);
 
@@ -37,7 +36,6 @@ void ACoin::OnCollect()
 
 void ACoin::DeathTimerComplete()
 {
-	// Easy way to acccess the gamemode
 	AFPSGamemode* Gamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (Gamemode)
 	{

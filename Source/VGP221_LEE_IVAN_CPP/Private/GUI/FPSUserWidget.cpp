@@ -2,6 +2,8 @@
 
 void UFPSUserWidget::NativeConstruct()
 {
+	Super::NativeConstruct();
+
 	SetHealthBar(1.0f);
 	SetScore(0);
 
@@ -19,9 +21,10 @@ void UFPSUserWidget::NativeConstruct()
 
 void UFPSUserWidget::SetHealthBar(float percentage)
 {
-	if(!HealthBar) return;
-
-	HealthBar->SetPercent(percentage);
+	if (HealthBar)
+	{
+		HealthBar->SetPercent(percentage);
+	}
 }
 
 void UFPSUserWidget::SetScore(int newScore)
@@ -31,11 +34,3 @@ void UFPSUserWidget::SetScore(int newScore)
 	UIScore += newScore;
 	ScoreText->SetText(FText::FromString("Score: " + FString::FromInt(UIScore)));
 }
-
-//void UFPSUserWidget::OnHealthUpdated(UHealthComponent* Sender, float NewHealth)
-//{
-//	if (!HealthBar) return;
-//
-//	float HealthPercent = NewHealth / Sender->MaxHealth;
-//	SetHealthBar(HealthPercent);
-//}

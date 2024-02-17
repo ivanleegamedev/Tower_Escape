@@ -36,5 +36,4 @@ void AFPSGamemode::ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass)
 		CurrentWidget = CreateWidget<UFPSUserWidget>(GetWorld(), NewWidgetClass);
 		CurrentWidget->AddToViewport();
 	}
-
 }

@@ -9,7 +9,6 @@
 #include "Gamemode/FPSGamemode.h"
 #include "HealthComponent/HealthComponent.h"
 #include "Interfaces/IDamageable.h"
-#include "GUI/FPSUserWidget.h"
 #include "FPSCharacter.generated.h"
 
 
@@ -43,9 +42,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	UHealthComponent* HealthComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = "UI")
-	TSubclassOf<UFPSUserWidget> UserWidgetClass;
-
 	// Projectile class to spawn.
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	TSubclassOf<class AFPSProjectile> ProjectileClass;
@@ -55,8 +51,6 @@ public:
 	FVector MuzzleOffset;
 
 private:
-	UFPSUserWidget* UserWidget;
-
 	UFUNCTION()
 	void MoveForward(float value);
 
