@@ -4,7 +4,6 @@
 #include "UObject/Interface.h"
 #include "IDamageable.generated.h"
 
-// This class does not need to be modified.
 UINTERFACE(MinimalAPI, Blueprintable)
 class UIDamageable : public UInterface
 {
@@ -18,7 +17,6 @@ class VGP221_LEE_IVAN_CPP_API IIDamageable
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
 	// The standard way to take damage
@@ -28,4 +26,11 @@ public:
 	// An event for handling death
 	UFUNCTION(BlueprintNativeEvent, Category = "Health")
 	void HandleDeath();
+
+	// May need to add more functions
+	// UFUNCTION(BlueprintNativeEvent, Category = "Health")
+	// float GetCurrentHealth(); const;
+
+	// UFUNCTION(BlueprintNativeEvent, Category = "Health")
+	// bool IsAlive() const;
 };

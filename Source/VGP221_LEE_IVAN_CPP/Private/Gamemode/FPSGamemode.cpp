@@ -7,7 +7,7 @@ void AFPSGamemode::StartPlay()
 	// C Assert
 	// If this fails throw an error
 	check(GEngine != nullptr)
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Starting FPS Map")));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Starting FPS Map")));
 	
 	// Log to console
 	// int test = 10;

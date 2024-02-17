@@ -26,27 +26,36 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Projectile class to spawn.
-	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-	TSubclassOf<class AFPSProjectile> ProjectileClass;
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* FPSCameraComponent;
+
+	// First-person mesh (arms), visible only to the owning player.
+	UPROPERTY(VisibleDefaultsOnly, Category = "Mesh")
+	USkeletalMeshComponent* FPSMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	UHealthComponent* HealthComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UFPSUserWidget> UserWidgetClass;
+
+	// Projectile class to spawn.
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	TSubclassOf<class AFPSProjectile> ProjectileClass;
 
 	// Gun muzzle offset from the camera location.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	FVector MuzzleOffset;
 
-	// First-person mesh (arms), visible only to the owning player.
-	UPROPERTY(VisibleDefaultsOnly, Category = "Mesh")
-	USkeletalMeshComponent* FPSMesh;
+private:
+	UFPSUserWidget* UserWidget;
 
 	UFUNCTION()
 	void MoveForward(float value);
@@ -60,26 +69,16 @@ public:
 	UFUNCTION()
 	void EndJump();
 
-	// Function that handles firing projectiles.
 	UFUNCTION()
 	void Fire();
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
-	UHealthComponent* HealthComponent;
 
 	// IDamageable interface implementation
 	void TakeDamage_Implementation(float DamageAmount) override;
 	void HandleDeath_Implementation() override;
 
 	UFUNCTION()
-	void OnHealthChanged(UHealthComponent* HealthComp, float NewHealth);
+	void OnHealthChanged(float NewHealthPercentage);
 
 	UFUNCTION()
 	void OnCharacterDeath();
-
-	UPROPERTY(EditDefaultsOnly, Category = "UI")
-	TSubclassOf<UFPSUserWidget> UserWidgetClass;
-
-	UPROPERTY()
-	UFPSUserWidget* UserWidget;
 };
