@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "GUI/FPSUserWidget.h"
 
 void UFPSUserWidget::NativeConstruct()
@@ -34,3 +31,11 @@ void UFPSUserWidget::SetScore(int newScore)
 	UIScore += newScore;
 	ScoreText->SetText(FText::FromString("Score: " + FString::FromInt(UIScore)));
 }
+
+//void UFPSUserWidget::OnHealthUpdated(UHealthComponent* Sender, float NewHealth)
+//{
+//	if (!HealthBar) return;
+//
+//	float HealthPercent = NewHealth / Sender->MaxHealth;
+//	SetHealthBar(HealthPercent);
+//}

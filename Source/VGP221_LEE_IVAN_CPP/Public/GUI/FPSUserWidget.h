@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -8,6 +6,7 @@
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "GUI/ButtonWidget.h"
+#include "HealthComponent/HealthComponent.h"
 #include "FPSUserWidget.generated.h"
 
 /**
@@ -38,6 +37,9 @@ public:
 
 	UFUNCTION()
 	void SetScore(int newScore);
+
+	//UFUNCTION()
+	//void OnHealthUpdated(UHealthComponent* Sender, float NewHealth);
 
 private:
 	UPROPERTY()

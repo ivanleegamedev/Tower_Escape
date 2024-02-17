@@ -1,6 +1,3 @@
-// Fill out your copyri	ght notice in the Description page of Project Settings.
-
-
 #include "Collectibles/Coin.h"
 
 ACoin::ACoin()

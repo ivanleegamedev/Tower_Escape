@@ -8,11 +8,13 @@
 #include "Kismet/GameplayStatics.h"
 #include "Gamemode/FPSGamemode.h"
 #include "HealthComponent/HealthComponent.h"
+#include "Interfaces/IDamageable.h"
+#include "GUI/FPSUserWidget.h"
 #include "FPSCharacter.generated.h"
 
 
 UCLASS()
-class VGP221_LEE_IVAN_CPP_API AFPSCharacter : public ACharacter
+class VGP221_LEE_IVAN_CPP_API AFPSCharacter : public ACharacter, public IIDamageable
 {
 	GENERATED_BODY()
 
@@ -64,4 +66,20 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	UHealthComponent* HealthComponent;
+
+	// IDamageable interface implementation
+	void TakeDamage_Implementation(float DamageAmount) override;
+	void HandleDeath_Implementation() override;
+
+	UFUNCTION()
+	void OnHealthChanged(UHealthComponent* HealthComp, float NewHealth);
+
+	UFUNCTION()
+	void OnCharacterDeath();
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UFPSUserWidget> UserWidgetClass;
+
+	UPROPERTY()
+	UFPSUserWidget* UserWidget;
 };

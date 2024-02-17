@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Player/FPSCharacter.h"
 
 // Sets default values
@@ -54,6 +51,18 @@ void AFPSCharacter::BeginPlay()
 	
 	check(GEngine != nullptr)
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Spawning FPSCharacter")));
+
+	if (UserWidgetClass)
+	{
+		UserWidget = CreateWidget<UFPSUserWidget>(GetWorld(), UserWidgetClass);
+		UserWidget->AddToViewport();
+	}
+
+	if (HealthComponent)
+	{
+		HealthComponent->OnHealthChanged.AddDynamic(this, &AFPSCharacter::OnHealthChanged);
+		HealthComponent->OnDeath.AddDynamic(this, &AFPSCharacter::OnCharacterDeath);
+	}
 }
 
 // Called every frame
@@ -106,15 +115,8 @@ void AFPSCharacter::EndJump()
 
 void AFPSCharacter::Fire()
 {
-	// Easy way to access the game mode
-	AFPSGamemode* Gamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (HealthComponent) 
-	{
-		HealthComponent->TakeDamage(10.0f);
-		float HealthPercent = HealthComponent->CurrentHealth / HealthComponent->MaxHealth;
-
-		Gamemode->CurrentWidget->SetHealthBar(HealthPercent);
-	}
+	// for testing purposes
+	TakeDamage_Implementation(10.0f);
 
 	// Rest of the fire code
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Player Fired Pressed")));
@@ -157,4 +159,46 @@ void AFPSCharacter::Fire()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No Projectile class set for FPSCharacter!"))
 	}
+}
+
+void AFPSCharacter::TakeDamage_Implementation(float DamageAmount)
+{
+	if (HealthComponent)
+	{
+		HealthComponent->ReduceHealth(DamageAmount);
+	}
+
+	// Easy way to access the game mode
+	//AFPSGamemode* Gamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
+	//if (HealthComponent)
+	//{
+	//	HealthComponent->ReduceHealth(10.0f);
+	//	float HealthPercent = HealthComponent->CurrentHealth / HealthComponent->MaxHealth;
+
+	//	Gamemode->CurrentWidget->SetHealthBar(HealthPercent);
+	//}
+}
+
+void AFPSCharacter::HandleDeath_Implementation()
+{
+	// Disable input
+	DisableInput(Cast<APlayerController>(GetController()));
+	
+	// Call OnCharacterDeath to handle additional death logic to the character
+	OnCharacterDeath();
+}
+
+void AFPSCharacter::OnHealthChanged(UHealthComponent* HealthComp, float NewHealth)
+{
+	if (UserWidget)
+	{
+		float HealthPercent = NewHealth / HealthComponent->MaxHealth;
+		UserWidget->SetHealthBar(HealthPercent);
+	}
+}
+
+void AFPSCharacter::OnCharacterDeath()
+{
+	// Call Game Over Screen
+	UE_LOG(LogTemp, Warning, TEXT("Character has died!"));
 }

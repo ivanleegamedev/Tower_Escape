@@ -4,6 +4,11 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
+// Delcare a delegate type for death notification
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
+
+// Delcare a delegate type for health changes
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, UHealthComponent*, HealthComponent, float, NewHealth);
 
 UCLASS(Blueprintable)
 class VGP221_LEE_IVAN_CPP_API UHealthComponent : public UActorComponent
@@ -30,7 +35,15 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	float CurrentHealth;
 
-	// Function to handle the damage the player takes
+	// Function to handle the damage taken
 	UFUNCTION()
-	void TakeDamage(float DamageAmount);
+	void ReduceHealth(float DamageAmount);
+
+	// Delegate for when health changes
+	UPROPERTY(BlueprintAssignable, Category = "Health")
+	FOnHealthChanged OnHealthChanged;
+
+	// Delegate for when health reaches 0
+	UPROPERTY(BlueprintAssignable, Category = "Health")
+	FOnDeath OnDeath;
 };
