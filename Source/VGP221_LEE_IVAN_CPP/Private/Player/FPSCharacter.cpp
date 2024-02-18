@@ -33,14 +33,13 @@ void AFPSCharacter::BeginPlay()
 	check(GEngine != nullptr)
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Spawning FPSCharacter")));
 
-	HealthComponent->OnHealthChanged.AddDynamic(this, &AFPSCharacter::OnHealthChanged);
+	HealthComponent->OnHealthChanged.AddDynamic(this, &AFPSCharacter::UpdateHealthUI);
 	HealthComponent->OnDeath.AddDynamic(this, &AFPSCharacter::OnCharacterDeath);
 }
 
 void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -142,7 +141,7 @@ void AFPSCharacter::HandleDeath_Implementation()
 	OnCharacterDeath();
 }
 
-void AFPSCharacter::OnHealthChanged(float NewHealthPercentage)
+void AFPSCharacter::UpdateHealthUI(float NewHealthPercentage)
 {
 	AFPSGamemode* FPSGamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (FPSGamemode && FPSGamemode->CurrentWidget)

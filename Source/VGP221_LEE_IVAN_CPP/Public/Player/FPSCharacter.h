@@ -18,14 +18,10 @@ class VGP221_LEE_IVAN_CPP_API AFPSCharacter : public ACharacter, public IIDamage
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AFPSCharacter();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:	
@@ -71,7 +67,7 @@ private:
 	void HandleDeath_Implementation() override;
 
 	UFUNCTION()
-	void OnHealthChanged(float NewHealthPercentage);
+	void UpdateHealthUI(float NewHealthPercentage);
 
 	UFUNCTION()
 	void OnCharacterDeath();
