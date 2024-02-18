@@ -29,6 +29,12 @@ void ACoin::OnCollect()
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Coin OnCollect Called")));
 
+	AFPSGamemode* Gamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (Gamemode)
+	{
+		Gamemode->CurrentWidget->SetScore(Points);
+	}
+
 	GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &ACoin::DeathTimerComplete, 0.5f, false);
 
 	RotationRate = CollectRotationRate;
@@ -36,11 +42,5 @@ void ACoin::OnCollect()
 
 void ACoin::DeathTimerComplete()
 {
-	AFPSGamemode* Gamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (Gamemode)
-	{
-		Gamemode->CurrentWidget->SetScore(Points);
-	}
-
 	Destroy();
 }

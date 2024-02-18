@@ -29,5 +29,5 @@ void ACollectible::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 
 void ACollectible::OnCollect()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Collectible OnCollect Called")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Collectible OnCollect Called")));
 }

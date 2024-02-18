@@ -3,19 +3,18 @@
 #include "CoreMinimal.h"
 #include "Collectibles/Collectible.h"
 #include "Kismet/GameplayStatics.h"
-#include "Gamemode/FPSGamemode.h"
-#include "Coin.generated.h"
+#include "HealthPack.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class VGP221_LEE_IVAN_CPP_API ACoin : public ACollectible
+class VGP221_LEE_IVAN_CPP_API AHealthPack : public ACollectible
 {
 	GENERATED_BODY()
 	
 public:
-	ACoin();
+	AHealthPack();
 
 protected:
 	virtual void BeginPlay() override;
@@ -26,10 +25,10 @@ public:
 	virtual void OnCollect() override;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* CoinMesh;
+	UStaticMeshComponent* HealthPackMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Points = 1;
+	UPROPERTY(VisibleAnywhere, Category = "Health")
+	float HealthAmount = 20.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float RotationRate = 100;
