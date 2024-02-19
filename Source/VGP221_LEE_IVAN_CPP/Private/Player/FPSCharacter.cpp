@@ -33,8 +33,8 @@ void AFPSCharacter::BeginPlay()
 	check(GEngine != nullptr)
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Spawning FPSCharacter")));
 
-	HealthComponent->OnHealthChanged.AddDynamic(this, &AFPSCharacter::UpdateHealthUI);
-	HealthComponent->OnDeath.AddDynamic(this, &AFPSCharacter::OnCharacterDeath);
+	HealthComponent->OnHealthChangedEvent.AddDynamic(this, &AFPSCharacter::UpdateHealthUI);
+	HealthComponent->OnDeathEvent.AddDynamic(this, &AFPSCharacter::OnCharacterDeath);
 }
 
 void AFPSCharacter::Tick(float DeltaTime)
@@ -82,8 +82,6 @@ void AFPSCharacter::Fire()
 	// for testing purposes
 	TakeDamage_Implementation(10.0f);
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Player Fired Pressed")));
-
 	if (ProjectileClass)
 	{
 		// Get the camera transform.
@@ -129,9 +127,6 @@ void AFPSCharacter::TakeDamage_Implementation(float DamageAmount)
 	if (HealthComponent)
 	{
 		HealthComponent->TakeDamage(DamageAmount);
-
-		// Debug log ensuring the damage is being taken
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("TakeDamage_Implementation Called")));
 	}
 }
 

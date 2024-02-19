@@ -1,9 +1,7 @@
 #include "Projectiles/FPSProjectile.h"
 
-// Sets default values
 AFPSProjectile::AFPSProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
     if (!RootComponent)
@@ -13,15 +11,10 @@ AFPSProjectile::AFPSProjectile()
 
     if (!CollisionComponent)
     {
-        // Use a sphere as a simple collision representation.
         CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
-        // Set the sphere's collision profile name to "Projectile".
         CollisionComponent->BodyInstance.SetCollisionProfileName(TEXT("Projectile"));
-        // Event called when component hits something.
         CollisionComponent->OnComponentHit.AddDynamic(this, &AFPSProjectile::OnHit);
-        // Set the sphere's collision radius.
         CollisionComponent->InitSphereRadius(15.0f);
-        // Set the root component to be the collision component.
         RootComponent = CollisionComponent;
     }
 
@@ -57,36 +50,34 @@ AFPSProjectile::AFPSProjectile()
         ProjectileMeshComponent->SetupAttachment(RootComponent);
     }
 
-    // Delete the projectile after 3 seconds.
     InitialLifeSpan = 3.0f;
 }
 
-// Called when the game starts or when spawned
 void AFPSProjectile::BeginPlay()
 {
-	Super::BeginPlay();
-	
+	Super::BeginPlay();	
 }
 
-// Called every frame
 void AFPSProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AFPSProjectile::FireInDirection(const FVector& ShootDirection)
 {
-    // 1. FVector ShootDirection: Pass by value, least effecient
-    // 2. FVector& OutShootDirection: Basically an out. Will change the variable outside this scope
-    // 3. Const FVector& OutShootDirection: Pass by memory, but we can't directly change the paremeter
     ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
 
 void AFPSProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-    // Collision with only physics objects
-    if (OtherActor != this && OtherComponent->IsSimulatingPhysics())
+    if (OtherActor == this) return;
+
+    IIDamageable* DamageableActor = Cast<IIDamageable>(OtherActor);
+    if (DamageableActor)
+    {
+        IIDamageable::Execute_TakeDamage(OtherActor, DamageAmount);
+    }
+    else if (OtherComponent->IsSimulatingPhysics())
     {
         OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
     }

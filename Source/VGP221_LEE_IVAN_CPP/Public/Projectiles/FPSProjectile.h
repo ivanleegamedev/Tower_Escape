@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Interfaces/IDamageable.h"
 #include "FPSProjectile.generated.h"
 
 UCLASS()
@@ -20,29 +21,26 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Sphere collision component
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 	USphereComponent* CollisionComponent;
 
-	// Projectile movement component.
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 	UProjectileMovementComponent* ProjectileMovementComponent;
 
 	// Function that initializes the projectile's velocity in the shoot direction.
 	void FireInDirection(const FVector& ShootDirection);
 
-	// Projectile mesh
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 	UStaticMeshComponent* ProjectileMeshComponent;
 
-	// Projectile material
 	UPROPERTY(VisibleDefaultsOnly, Category = Movement)
 	UMaterialInstanceDynamic* ProjectileMaterialInstance;
 
-	// Function that is called when the projectile hits something.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+	float DamageAmount = 10.0f;
+
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 };

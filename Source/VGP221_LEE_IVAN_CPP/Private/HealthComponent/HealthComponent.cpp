@@ -15,16 +15,16 @@ void UHealthComponent::BeginPlay()
 void UHealthComponent::TakeDamage(float DamageAmount)
 {
 	CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.0f, MaxHealth);
-	OnHealthChanged.Broadcast(CurrentHealth / MaxHealth);
+	OnHealthChangedEvent.Broadcast(CurrentHealth / MaxHealth);
 
 	if (CurrentHealth <= 0.0f)
 	{
-		OnDeath.Broadcast();
+		OnDeathEvent.Broadcast();
 	}
 }
 
 void UHealthComponent::IncreaseHealth(float Amount)
 {
 	CurrentHealth = FMath::Clamp(CurrentHealth + Amount, 0.0f, MaxHealth);
-	OnHealthChanged.Broadcast(CurrentHealth / MaxHealth);
+	OnHealthChangedEvent.Broadcast(CurrentHealth / MaxHealth);
 }

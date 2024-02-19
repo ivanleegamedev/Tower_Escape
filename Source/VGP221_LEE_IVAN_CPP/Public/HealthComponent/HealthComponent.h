@@ -4,11 +4,8 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
-// Delcare a delegate type for death notification
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
-
-// Delcare a delegate type for health changes
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float, NewHealthPercentage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathEvent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedEvent, float, NewHealthPercentage);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class VGP221_LEE_IVAN_CPP_API UHealthComponent : public UActorComponent
@@ -37,9 +34,9 @@ public:
 
 	// Delegate for when health changes
 	UPROPERTY(BlueprintAssignable, Category = "Events")
-	FOnHealthChanged OnHealthChanged;
+	FOnHealthChangedEvent OnHealthChangedEvent;
 
 	// Delegate for when health reaches 0
 	UPROPERTY(BlueprintAssignable, Category = "Events")
-	FOnDeath OnDeath;
+	FOnDeathEvent OnDeathEvent;
 };

@@ -11,6 +11,18 @@ ABasicTurret::ABasicTurret()
 	TurretMesh->SetupAttachment(Root);
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+
+	Beam = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RadarBeam"));
+	Beam->SetupAttachment(TurretMesh, TEXT("BeamSocket"));
+
+	BeamStartLocation = CreateDefaultSubobject<USceneComponent>(TEXT("BeamStartLocation"));
+	BeamStartLocation->SetupAttachment(Root);
+
+	BeamEndLocation = CreateDefaultSubobject<USceneComponent>(TEXT("BeamEndLocation"));
+	BeamEndLocation->SetupAttachment(Root);
+
+	BeamTarget = CreateDefaultSubobject<USceneComponent>(TEXT("BeamTarget"));
+	BeamTarget->SetupAttachment(Root);
 }
 
 void ABasicTurret::BeginPlay()
@@ -21,14 +33,42 @@ void ABasicTurret::BeginPlay()
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Spawning Turret")));
 
-	HealthComponent->OnHealthChanged.AddDynamic(this, &ABasicTurret::OnHealthChanged);
-	HealthComponent->OnDeath.AddDynamic(this, &ABasicTurret::OnTurretDeath);
+	HealthComponent->OnDeathEvent.AddDynamic(this, &ABasicTurret::OnTurretDeath);
+
+	GetWorldTimerManager().SetTimer(BeamTimerHandler, this, &ABasicTurret::BeamScanning, 5.0f, true, 1.0f);
 }
 
 void ABasicTurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	UpdateLookAtTarget();
+}
+
+void ABasicTurret::UpdateLookAtTarget()
+{
+	FVector Start = TurretMesh->GetSocketLocation("BeamSocket");
+	FVector End = BeamTarget->GetComponentLocation();
+	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(Start, End);
+
+	if (TurretMesh->GetAnimInstance()->Implements<UITurretAnimation>())
+	{
+		IITurretAnimation::Execute_UpdateLookAtRotation(TurretMesh->GetAnimInstance(), LookAtRotation);
+	}
+}
+
+void ABasicTurret::BeamScanning()
+{
+	BeamCounter++;
+	
+	if (BeamCounter % 2 == 0)
+	{
+		BeamTarget->SetWorldLocation(BeamStartLocation->GetComponentLocation());
+	}
+	else
+	{
+		BeamTarget->SetWorldLocation(BeamEndLocation->GetComponentLocation());
+	}
 }
 
 void ABasicTurret::TakeDamage_Implementation(float DamageAmount)
@@ -36,9 +76,7 @@ void ABasicTurret::TakeDamage_Implementation(float DamageAmount)
 	if (HealthComponent)
 	{
 		HealthComponent->TakeDamage(DamageAmount);
-
-		// Debug log ensuring the damage is being taken
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("BasicTurret's TakeDamage_Implementation Called")));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("BasicTurret's OnHealthChanged Called")));
 	}
 }
 
@@ -47,15 +85,13 @@ void ABasicTurret::HandleDeath_Implementation()
 	OnTurretDeath();
 }
 
-void ABasicTurret::OnHealthChanged(float NewHealthPercentage)
-{
-	// Debug log ensuring the health is being changed
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("BasicTurret's OnHealthChanged Called")));
-}
-
 void ABasicTurret::OnTurretDeath()
 {
+	// Debug message to show that the turret has been destroyed
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Turret has been destroyed!")));
+
+	// TODO: Update UI to increase turret destroyed count
+
 	Destroy();
 }
 

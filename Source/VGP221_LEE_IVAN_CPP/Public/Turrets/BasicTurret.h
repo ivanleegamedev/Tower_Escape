@@ -4,23 +4,23 @@
 #include "GameFramework/Actor.h"
 #include "HealthComponent/HealthComponent.h"
 #include "Interfaces/IDamageable.h"
+#include "Interfaces/ITurretAnimation.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Engine/EngineTypes.h"
 #include "BasicTurret.generated.h"
 
 UCLASS()
-class VGP221_LEE_IVAN_CPP_API ABasicTurret : public AActor, public IIDamageable
+class VGP221_LEE_IVAN_CPP_API ABasicTurret : public AActor, public IIDamageable, public IITurretAnimation
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ABasicTurret();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(VisibleAnywhere)
@@ -32,13 +32,34 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	USkeletalMeshComponent* TurretMesh;
 
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* Beam;
+
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* BeamStartLocation;
+
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* BeamEndLocation;
+
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* BeamTarget;
+
+	UPROPERTY()
+	int BeamCounter = 0;
+
+	UPROPERTY()
+	FTimerHandle BeamTimerHandler;
+
+	UFUNCTION()
+	void UpdateLookAtTarget();
+
+	UFUNCTION()
+	void BeamScanning();
+
 private:
 	// IDamageable interface implementation
 	void TakeDamage_Implementation(float DamageAmount) override;
 	void HandleDeath_Implementation() override;
-
-	UFUNCTION()
-	void OnHealthChanged(float NewHealthPercentage);
 
 	UFUNCTION()
 	void OnTurretDeath();
