@@ -20,14 +20,19 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	// Beam Length
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Beam")
+	float BeamLength = 1000.0f;
+
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere)
-	USceneComponent* Root;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	UHealthComponent* HealthComponent;
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* Root;
 
 	UPROPERTY(EditDefaultsOnly)
 	USkeletalMeshComponent* TurretMesh;
@@ -36,16 +41,19 @@ public:
 	UStaticMeshComponent* Beam;
 
 	UPROPERTY(VisibleAnywhere)
-	USceneComponent* BeamStartLocation;
+	USceneComponent* BeamScanTarget1;
 
 	UPROPERTY(VisibleAnywhere)
-	USceneComponent* BeamEndLocation;
+	USceneComponent* BeamScanTarget2;
 
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* BeamTarget;
 
 	UPROPERTY()
-	FTimerHandle BeamTimerHandler;
+	FTimerHandle ScanTimerHandler;
+
+	UPROPERTY()
+	FTimerHandle TraceTimerHandler;
 
 	int BeamCounter = 0;
 	FRotator LookAtRotation;
@@ -62,9 +70,14 @@ public:
 	void UpdateLookAtTarget(float DeltaTime);
 
 	UFUNCTION()
-	void BeamScanning();
+	void BeamScanTarget();
 
-private:
+	UFUNCTION(BlueprintCallable)
+	void SetBeamLength(float Length);
+
+	UFUNCTION()
+	void TraceBeam();
+
 	// IDamageable interface implementation
 	void TakeDamage_Implementation(float DamageAmount) override;
 	void HandleDeath_Implementation() override;

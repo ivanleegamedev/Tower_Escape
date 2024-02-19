@@ -1,5 +1,7 @@
 #include "Turrets/BasicTurret.h"
 
+#define OUT
+
 ABasicTurret::ABasicTurret()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -15,14 +17,16 @@ ABasicTurret::ABasicTurret()
 	Beam = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RadarBeam"));
 	Beam->SetupAttachment(TurretMesh, TEXT("BeamSocket"));
 
-	BeamStartLocation = CreateDefaultSubobject<USceneComponent>(TEXT("BeamStartLocation"));
-	BeamStartLocation->SetupAttachment(Root);
+	BeamScanTarget1 = CreateDefaultSubobject<USceneComponent>(TEXT("BeamScanTarget1"));
+	BeamScanTarget1->SetupAttachment(Root);
 
-	BeamEndLocation = CreateDefaultSubobject<USceneComponent>(TEXT("BeamEndLocation"));
-	BeamEndLocation->SetupAttachment(Root);
+	BeamScanTarget2 = CreateDefaultSubobject<USceneComponent>(TEXT("BeamScanTarget2"));
+	BeamScanTarget2->SetupAttachment(Root);
 
 	BeamTarget = CreateDefaultSubobject<USceneComponent>(TEXT("BeamTarget"));
 	BeamTarget->SetupAttachment(Root);
+
+	SetBeamLength(BeamLength);
 }
 
 void ABasicTurret::BeginPlay()
@@ -35,7 +39,8 @@ void ABasicTurret::BeginPlay()
 
 	HealthComponent->OnDeathEvent.AddDynamic(this, &ABasicTurret::OnTurretDeath);
 
-	GetWorldTimerManager().SetTimer(BeamTimerHandler, this, &ABasicTurret::BeamScanning, ChangeTargetDelay, true, 1.0f);
+	GetWorldTimerManager().SetTimer(ScanTimerHandler, this, &ABasicTurret::BeamScanTarget, ChangeTargetDelay, true, 1.0f);
+	GetWorldTimerManager().SetTimer(TraceTimerHandler, this, &ABasicTurret::TraceBeam, 0.1f, true, 0.1f);
 }
 
 void ABasicTurret::Tick(float DeltaTime)
@@ -43,6 +48,7 @@ void ABasicTurret::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	UpdateLookAtTarget(DeltaTime);
+	//TraceBeam();
 }
 
 void ABasicTurret::UpdateLookAtTarget(float DeltaTime)
@@ -60,17 +66,17 @@ void ABasicTurret::UpdateLookAtTarget(float DeltaTime)
 	}
 }
 
-void ABasicTurret::BeamScanning()
+void ABasicTurret::BeamScanTarget()
 {
 	BeamCounter++;
 	
 	if (BeamCounter % 2 == 0)
 	{
-		BeamTarget->SetWorldLocation(BeamStartLocation->GetComponentLocation());
+		BeamTarget->SetWorldLocation(BeamScanTarget1->GetComponentLocation());
 	}
 	else
 	{
-		BeamTarget->SetWorldLocation(BeamEndLocation->GetComponentLocation());
+		BeamTarget->SetWorldLocation(BeamScanTarget2->GetComponentLocation());
 	}
 
 	FVector Start = TurretMesh->GetSocketLocation("BeamSocket");
@@ -79,6 +85,35 @@ void ABasicTurret::BeamScanning()
 
 	RotationDelta = TargetRotation - LookAtRotation;
 	RotationDelta.Normalize();
+}
+
+void ABasicTurret::SetBeamLength(float Length)
+{
+	Beam->SetRelativeScale3D(FVector(Length / 400, Beam->GetRelativeScale3D().Y, Beam->GetRelativeScale3D().Z));
+	Beam->SetRelativeLocation(FVector(Length / (-8), 0, 0));
+}
+
+void ABasicTurret::TraceBeam()
+{
+	FHitResult HitResult;
+	FVector Start = TurretMesh->GetSocketLocation("BeamSocket");
+	FVector End = Start + Beam->GetForwardVector() * BeamLength;
+
+	FCollisionQueryParams CollisionQueryParams;
+	CollisionQueryParams.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(OUT HitResult, Start, End, ECollisionChannel::ECC_Camera, CollisionQueryParams);
+
+	if (bHit)
+	{
+		// Adjust Beam Length
+		SetBeamLength(HitResult.Distance);
+	}
+	else
+	{
+		// Reset Beam Length
+		SetBeamLength(BeamLength);
+	}
 }
 
 void ABasicTurret::TakeDamage_Implementation(float DamageAmount)
