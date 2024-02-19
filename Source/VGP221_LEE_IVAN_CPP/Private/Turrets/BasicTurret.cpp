@@ -27,6 +27,9 @@ ABasicTurret::ABasicTurret()
 	BeamTarget->SetupAttachment(Root);
 
 	SetBeamLength(BeamLength);
+
+	P_MuzzleFlash = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MuzzleFlash"));
+	P_MuzzleFlash->SetupAttachment(TurretMesh, TEXT("BeamSocket"));
 }
 
 void ABasicTurret::BeginPlay()

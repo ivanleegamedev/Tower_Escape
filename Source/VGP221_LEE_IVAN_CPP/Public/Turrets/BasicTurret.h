@@ -8,6 +8,7 @@
 #include "Interfaces/IDetectable.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/EngineTypes.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "BasicTurret.generated.h"
 
 UCLASS()
@@ -69,6 +70,9 @@ private:
 
 	UPROPERTY()
 	AActor* Player = nullptr;
+
+	UPROPERTY(EditDefaultsOnly)
+	UParticleSystemComponent* P_MuzzleFlash;
 
 	UFUNCTION()
 	void UpdateLookAtTarget(float DeltaTime);
