@@ -45,13 +45,21 @@ public:
 	USceneComponent* BeamTarget;
 
 	UPROPERTY()
-	int BeamCounter = 0;
-
-	UPROPERTY()
 	FTimerHandle BeamTimerHandler;
 
+	int BeamCounter = 0;
+	FRotator LookAtRotation;
+	FRotator TargetRotation;
+	FRotator RotationDelta;
+
+	UPROPERTY(EditAnywhere)
+	float ChangeTargetDelay = 5.0f;
+
+	UPROPERTY(EditAnywhere)
+	float RotationRateMultiplier = 1.0f;
+
 	UFUNCTION()
-	void UpdateLookAtTarget();
+	void UpdateLookAtTarget(float DeltaTime);
 
 	UFUNCTION()
 	void BeamScanning();

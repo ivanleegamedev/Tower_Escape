@@ -35,21 +35,24 @@ void ABasicTurret::BeginPlay()
 
 	HealthComponent->OnDeathEvent.AddDynamic(this, &ABasicTurret::OnTurretDeath);
 
-	GetWorldTimerManager().SetTimer(BeamTimerHandler, this, &ABasicTurret::BeamScanning, 5.0f, true, 1.0f);
+	GetWorldTimerManager().SetTimer(BeamTimerHandler, this, &ABasicTurret::BeamScanning, ChangeTargetDelay, true, 1.0f);
 }
 
 void ABasicTurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UpdateLookAtTarget();
+	UpdateLookAtTarget(DeltaTime);
 }
 
-void ABasicTurret::UpdateLookAtTarget()
+void ABasicTurret::UpdateLookAtTarget(float DeltaTime)
 {
-	FVector Start = TurretMesh->GetSocketLocation("BeamSocket");
-	FVector End = BeamTarget->GetComponentLocation();
-	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(Start, End);
+	if (LookAtRotation.Equals(TargetRotation, 1.0f))
+	{
+		return;
+	}
+
+	LookAtRotation += RotationDelta * RotationRateMultiplier * DeltaTime;
 
 	if (TurretMesh->GetAnimInstance()->Implements<UITurretAnimation>())
 	{
@@ -69,6 +72,13 @@ void ABasicTurret::BeamScanning()
 	{
 		BeamTarget->SetWorldLocation(BeamEndLocation->GetComponentLocation());
 	}
+
+	FVector Start = TurretMesh->GetSocketLocation("BeamSocket");
+	FVector End = BeamTarget->GetComponentLocation();
+	TargetRotation = UKismetMathLibrary::FindLookAtRotation(Start, End);
+
+	RotationDelta = TargetRotation - LookAtRotation;
+	RotationDelta.Normalize();
 }
 
 void ABasicTurret::TakeDamage_Implementation(float DamageAmount)
