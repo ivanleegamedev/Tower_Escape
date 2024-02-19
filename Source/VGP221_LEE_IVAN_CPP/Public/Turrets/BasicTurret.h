@@ -5,6 +5,7 @@
 #include "HealthComponent/HealthComponent.h"
 #include "Interfaces/IDamageable.h"
 #include "Interfaces/ITurretAnimation.h"
+#include "Interfaces/IDetectable.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/EngineTypes.h"
 #include "BasicTurret.generated.h"
@@ -66,6 +67,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	float RotationRateMultiplier = 1.0f;
 
+	UPROPERTY()
+	AActor* Player = nullptr;
+
 	UFUNCTION()
 	void UpdateLookAtTarget(float DeltaTime);
 
@@ -77,6 +81,15 @@ private:
 
 	UFUNCTION()
 	void TraceBeam();
+
+	UFUNCTION()
+	void CheckPlayerInSight(AActor* HitActor);
+
+	UFUNCTION()
+	void FollowPlayer(float DeltaTime);
+
+	UFUNCTION()
+	void Shoot();
 
 	// IDamageable interface implementation
 	void TakeDamage_Implementation(float DamageAmount) override;

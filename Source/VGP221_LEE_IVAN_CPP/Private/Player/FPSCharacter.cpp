@@ -136,6 +136,11 @@ void AFPSCharacter::HandleDeath_Implementation()
 	OnCharacterDeath();
 }
 
+bool AFPSCharacter::IsPlayerDetected_Implementation()
+{
+	return true;
+}
+
 void AFPSCharacter::UpdateHealthUI(float NewHealthPercentage)
 {
 	AFPSGamemode* FPSGamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));

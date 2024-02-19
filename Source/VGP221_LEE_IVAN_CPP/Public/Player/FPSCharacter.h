@@ -9,11 +9,12 @@
 #include "Gamemode/FPSGamemode.h"
 #include "HealthComponent/HealthComponent.h"
 #include "Interfaces/IDamageable.h"
+#include "Interfaces/IDetectable.h"
 #include "FPSCharacter.generated.h"
 
 
 UCLASS()
-class VGP221_LEE_IVAN_CPP_API AFPSCharacter : public ACharacter, public IIDamageable
+class VGP221_LEE_IVAN_CPP_API AFPSCharacter : public ACharacter, public IIDamageable, public IIDetectable
 {
 	GENERATED_BODY()
 
@@ -65,6 +66,9 @@ private:
 	// IDamageable interface implementation
 	void TakeDamage_Implementation(float DamageAmount) override;
 	void HandleDeath_Implementation() override;
+
+	// IDetectable interface implementation
+	bool IsPlayerDetected_Implementation() override;
 
 	UFUNCTION()
 	void UpdateHealthUI(float NewHealthPercentage);

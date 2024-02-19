@@ -47,8 +47,14 @@ void ABasicTurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UpdateLookAtTarget(DeltaTime);
-	//TraceBeam();
+	if (Player)
+	{
+		FollowPlayer(DeltaTime);
+	}
+	else
+	{
+		UpdateLookAtTarget(DeltaTime);
+	}
 }
 
 void ABasicTurret::UpdateLookAtTarget(float DeltaTime)
@@ -108,12 +114,51 @@ void ABasicTurret::TraceBeam()
 	{
 		// Adjust Beam Length
 		SetBeamLength(HitResult.Distance);
+
+		CheckPlayerInSight(HitResult.GetActor());
 	}
 	else
 	{
 		// Reset Beam Length
 		SetBeamLength(BeamLength);
 	}
+}
+
+void ABasicTurret::CheckPlayerInSight(AActor* HitActor)
+{
+	if (HitActor->Implements<UIDetectable>())
+	{
+		bool bIsPlayer = IIDetectable::Execute_IsPlayerDetected(HitActor);
+		if (bIsPlayer)
+		{
+			Player = HitActor;
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("BasicTurret Has Player In Sight")));
+		}		
+	}
+	else
+	{
+		Player = nullptr;
+	}
+}
+
+void ABasicTurret::FollowPlayer(float DeltaTime)
+{
+	FVector Start = TurretMesh->GetSocketLocation("BeamSocket");
+	FVector End = Player->GetActorLocation();
+
+	FRotator RotationToPlayer = UKismetMathLibrary::FindLookAtRotation(Start, End);
+
+	LookAtRotation = FMath::RInterpTo(LookAtRotation, RotationToPlayer, DeltaTime, 100.0f);
+
+	if (TurretMesh->GetAnimInstance()->Implements<UITurretAnimation>())
+	{
+		IITurretAnimation::Execute_UpdateLookAtRotation(TurretMesh->GetAnimInstance(), LookAtRotation);
+	}
+}
+
+void ABasicTurret::Shoot()
+{
+
 }
 
 void ABasicTurret::TakeDamage_Implementation(float DamageAmount)
