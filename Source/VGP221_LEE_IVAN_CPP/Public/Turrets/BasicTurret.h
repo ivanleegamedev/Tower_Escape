@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/DamageType.h"
 #include "Engine/DamageEvents.h"
+#include "Gamemode/FPSGamemode.h"
 #include "HealthComponent/HealthComponent.h"
 #include "Interfaces/IDamageable.h"
 #include "Interfaces/ITurretAnimation.h"
@@ -34,6 +35,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	UHealthComponent* HealthComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float KillCount = 1;
 
 private:
 	UPROPERTY(VisibleAnywhere)

@@ -145,15 +145,13 @@ void ABasicTurret::CheckPlayerInSight(AActor* HitActor)
 			}
 		}		
 	}
-	else
+	else if (Player)
 	{
-		if (Player)
-		{
-			Player = nullptr;
-			// Stop Shooting
-			GetWorldTimerManager().ClearTimer(ShootTimerHandler);
-		}
+		Player = nullptr;
+		// Stop Shooting
+		GetWorldTimerManager().ClearTimer(ShootTimerHandler);
 	}
+	
 }
 
 void ABasicTurret::FollowPlayer(float DeltaTime)
@@ -214,7 +212,11 @@ void ABasicTurret::OnTurretDeath()
 	// Debug message to show that the turret has been destroyed
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Turret has been destroyed!")));
 
-	// TODO: Update UI to increase turret destroyed count
+	AFPSGamemode* Gamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (Gamemode)
+	{
+		Gamemode->CurrentWidget->SetScore(KillCount);
+	}
 
 	Destroy();
 }
