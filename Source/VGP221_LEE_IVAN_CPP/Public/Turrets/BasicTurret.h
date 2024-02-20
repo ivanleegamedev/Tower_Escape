@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/DamageType.h"
+#include "Engine/DamageEvents.h"
 #include "HealthComponent/HealthComponent.h"
 #include "Interfaces/IDamageable.h"
 #include "Interfaces/ITurretAnimation.h"
@@ -9,6 +11,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/EngineTypes.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "BasicTurret.generated.h"
 
 UCLASS()
@@ -57,6 +60,9 @@ private:
 	UPROPERTY()
 	FTimerHandle TraceTimerHandler;
 
+	UPROPERTY()
+	FTimerHandle ShootTimerHandler;
+
 	int BeamCounter = 0;
 	FRotator LookAtRotation;
 	FRotator TargetRotation;
@@ -71,8 +77,11 @@ private:
 	UPROPERTY()
 	AActor* Player = nullptr;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Shoot")
 	UParticleSystemComponent* P_MuzzleFlash;
+
+	UPROPERTY(EditAnywhere, Category = "Shoot")
+	USoundBase* S_ShootSound;
 
 	UFUNCTION()
 	void UpdateLookAtTarget(float DeltaTime);

@@ -79,9 +79,6 @@ void AFPSCharacter::EndJump()
 
 void AFPSCharacter::Fire()
 {
-	// for testing purposes
-	TakeDamage_Implementation(10.0f);
-
 	if (ProjectileClass)
 	{
 		// Get the camera transform.
@@ -122,18 +119,14 @@ void AFPSCharacter::Fire()
 	}
 }
 
-void AFPSCharacter::TakeDamage_Implementation(float DamageAmount)
+float AFPSCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	if (HealthComponent)
 	{
 		HealthComponent->TakeDamage(DamageAmount);
+		return DamageAmount;
 	}
-}
-
-void AFPSCharacter::HandleDeath_Implementation()
-{
-	DisableInput(Cast<APlayerController>(GetController()));
-	OnCharacterDeath();
+	return DamageAmount;
 }
 
 bool AFPSCharacter::IsPlayerDetected_Implementation()
@@ -153,5 +146,6 @@ void AFPSCharacter::UpdateHealthUI(float NewHealthPercentage)
 void AFPSCharacter::OnCharacterDeath()
 {
 	// Call Game Over Screen
+	DisableInput(Cast<APlayerController>(GetController()));
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Character has died!")));
 }

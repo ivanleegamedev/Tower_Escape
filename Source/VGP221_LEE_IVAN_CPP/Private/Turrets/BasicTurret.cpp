@@ -30,6 +30,7 @@ ABasicTurret::ABasicTurret()
 
 	P_MuzzleFlash = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MuzzleFlash"));
 	P_MuzzleFlash->SetupAttachment(TurretMesh, TEXT("BeamSocket"));
+	P_MuzzleFlash->SetAutoActivate(false);
 }
 
 void ABasicTurret::BeginPlay()
@@ -134,13 +135,24 @@ void ABasicTurret::CheckPlayerInSight(AActor* HitActor)
 		bool bIsPlayer = IIDetectable::Execute_IsPlayerDetected(HitActor);
 		if (bIsPlayer)
 		{
-			Player = HitActor;
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("BasicTurret Has Player In Sight")));
+			if (!Player)
+			{
+				Player = HitActor;
+
+				// Start Shooting
+				GetWorldTimerManager().SetTimer(ShootTimerHandler, this, &ABasicTurret::Shoot, 0.75f, true, 0.25f);
+				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("BasicTurret Has Player In Sight")));
+			}
 		}		
 	}
 	else
 	{
-		Player = nullptr;
+		if (Player)
+		{
+			Player = nullptr;
+			// Stop Shooting
+			GetWorldTimerManager().ClearTimer(ShootTimerHandler);
+		}
 	}
 }
 
@@ -161,7 +173,26 @@ void ABasicTurret::FollowPlayer(float DeltaTime)
 
 void ABasicTurret::Shoot()
 {
+	// Play Sound at location
+	UGameplayStatics::PlaySoundAtLocation(this, S_ShootSound, P_MuzzleFlash->GetComponentLocation());
 
+	// Play Muzzle Flash
+	P_MuzzleFlash->Activate(true);
+
+	FHitResult HitResult;
+	FVector Start = TurretMesh->GetSocketLocation("BeamSocket");
+	FVector End = Start + Beam->GetForwardVector() * BeamLength;
+
+	FCollisionQueryParams CollisionQueryParams;
+	CollisionQueryParams.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(OUT HitResult, Start, End, ECollisionChannel::ECC_Camera, CollisionQueryParams);
+
+	if (bHit)
+	{
+		FPointDamageEvent DamageEvent(10.0f, HitResult, Beam->GetForwardVector(), nullptr);
+		HitResult.GetActor()->TakeDamage(10.0f, DamageEvent, GetInstigatorController(), this);
+	}
 }
 
 void ABasicTurret::TakeDamage_Implementation(float DamageAmount)
