@@ -124,14 +124,8 @@ float AFPSCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 	if (HealthComponent)
 	{
 		HealthComponent->TakeDamage(DamageAmount);
-		return DamageAmount;
 	}
 	return DamageAmount;
-}
-
-bool AFPSCharacter::IsPlayerDetected_Implementation()
-{
-	return true;
 }
 
 void AFPSCharacter::UpdateHealthUI(float NewHealthPercentage)
@@ -148,4 +142,9 @@ void AFPSCharacter::OnCharacterDeath()
 	// Call Game Over Screen
 	DisableInput(Cast<APlayerController>(GetController()));
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Character has died!")));
+}
+
+bool AFPSCharacter::IsPlayerDetected_Implementation()
+{
+	return true;
 }
