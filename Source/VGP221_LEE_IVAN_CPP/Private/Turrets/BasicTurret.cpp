@@ -140,7 +140,7 @@ void ABasicTurret::CheckPlayerInSight(AActor* HitActor)
 				Player = HitActor;
 
 				// Start Shooting
-				GetWorldTimerManager().SetTimer(ShootTimerHandler, this, &ABasicTurret::Shoot, 0.75f, true, 0.25f);
+				GetWorldTimerManager().SetTimer(ShootTimerHandler, this, &ABasicTurret::Shoot, 0.75f, true, 0.1f);
 				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("BasicTurret Has Player In Sight")));
 			}
 		}		
