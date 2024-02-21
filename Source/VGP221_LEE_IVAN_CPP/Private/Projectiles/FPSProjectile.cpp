@@ -50,7 +50,7 @@ AFPSProjectile::AFPSProjectile()
         ProjectileMeshComponent->SetupAttachment(RootComponent);
     }
 
-    InitialLifeSpan = 3.0f;
+    InitialLifeSpan = 0.5f;
 }
 
 void AFPSProjectile::BeginPlay()
