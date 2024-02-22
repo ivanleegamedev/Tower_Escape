@@ -34,7 +34,7 @@ void AFPSCharacter::BeginPlay()
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Spawning FPSCharacter")));
 
 	HealthComponent->OnHealthChangedEvent.AddDynamic(this, &AFPSCharacter::UpdateHealthUI);
-	HealthComponent->OnDeathEvent.AddDynamic(this, &AFPSCharacter::OnCharacterDeath);
+	HealthComponent->OnDeathEvent.AddDynamic(this, &AFPSCharacter::HandleDeath);
 }
 
 void AFPSCharacter::Tick(float DeltaTime)
@@ -119,13 +119,17 @@ void AFPSCharacter::Fire()
 	}
 }
 
-float AFPSCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+void AFPSCharacter::ReceiveDamage(float DamageAmount)
 {
 	if (HealthComponent)
 	{
 		HealthComponent->TakeDamage(DamageAmount);
 	}
-	return DamageAmount;
+}
+
+void AFPSCharacter::HandleDeath()
+{
+	OnCharacterDeath();
 }
 
 void AFPSCharacter::UpdateHealthUI(float NewHealthPercentage)

@@ -39,6 +39,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float KillCount = 1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float TurretDamageAmount = 10.0f;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
@@ -109,8 +112,8 @@ private:
 	void Shoot();
 
 	// IDamageable interface implementation
-	void TakeDamage_Implementation(float DamageAmount) override;
-	void HandleDeath_Implementation() override;
+	void ReceiveDamage(float DamageAmount) override;
+	void HandleDeath() override;
 
 	UFUNCTION()
 	void OnTurretDeath();

@@ -186,31 +186,34 @@ void ABasicTurret::Shoot()
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(OUT HitResult, Start, End, ECollisionChannel::ECC_Camera, CollisionQueryParams);
 
-	if (bHit)
+	if (bHit && HitResult.GetActor())
 	{
-		FPointDamageEvent DamageEvent(10.0f, HitResult, Beam->GetForwardVector(), nullptr);
-		HitResult.GetActor()->TakeDamage(10.0f, DamageEvent, GetInstigatorController(), this);
+		IIDamageable* DamageableActor = Cast<IIDamageable>(HitResult.GetActor());
+		if (DamageableActor)
+		{
+			// Use the interface method to apply damage
+			DamageableActor->ReceiveDamage(TurretDamageAmount);
+		}
 	}
 }
 
-void ABasicTurret::TakeDamage_Implementation(float DamageAmount)
+void ABasicTurret::ReceiveDamage(float DamageAmount)
 {
 	if (HealthComponent)
 	{
 		HealthComponent->TakeDamage(DamageAmount);
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("BasicTurret's OnHealthChanged Called")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("BasicTurret's OnHealthChanged Called")));
 	}
 }
 
-void ABasicTurret::HandleDeath_Implementation()
+void ABasicTurret::HandleDeath()
 {
 	OnTurretDeath();
 }
 
 void ABasicTurret::OnTurretDeath()
 {
-	// Debug message to show that the turret has been destroyed
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Turret has been destroyed!")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Turret has been destroyed!")));
 
 	AFPSGamemode* Gamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (Gamemode)

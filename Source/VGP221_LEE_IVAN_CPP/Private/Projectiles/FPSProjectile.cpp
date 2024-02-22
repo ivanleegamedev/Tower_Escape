@@ -70,16 +70,20 @@ void AFPSProjectile::FireInDirection(const FVector& ShootDirection)
 
 void AFPSProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-    if (OtherActor == this) return;
+    if (OtherActor != this && OtherActor != nullptr)
+    {
+        IIDamageable* DamageableActor = Cast<IIDamageable>(OtherActor);
+        if (DamageableActor)
+        {
+            DamageableActor->ReceiveDamage(DamageAmount);
+        }
 
-    IIDamageable* DamageableActor = Cast<IIDamageable>(OtherActor);
-    if (DamageableActor)
-    {
-        IIDamageable::Execute_TakeDamage(OtherActor, DamageAmount);
+        if (OtherComponent->IsSimulatingPhysics())
+        {
+            OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
+        }
+
+        Destroy();
     }
-    else if (OtherComponent->IsSimulatingPhysics())
-    {
-        OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
-    }
-    Destroy();
 }
+

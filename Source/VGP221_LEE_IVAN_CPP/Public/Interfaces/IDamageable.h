@@ -4,7 +4,7 @@
 #include "UObject/Interface.h"
 #include "IDamageable.generated.h"
 
-UINTERFACE(MinimalAPI, Blueprintable)
+UINTERFACE(MinimalAPI)
 class UIDamageable : public UInterface
 {
 	GENERATED_BODY()
@@ -19,18 +19,6 @@ class VGP221_LEE_IVAN_CPP_API IIDamageable
 
 public:
 
-	// The standard way to take damage
-	UFUNCTION(BlueprintNativeEvent, Category = "Damage") // BlueprintNativeEvent means that the function will be implemented in C++ and can be overridden in Blueprints
-	void TakeDamage(float DamageAmount);
-
-	// An event for handling death
-	UFUNCTION(BlueprintNativeEvent, Category = "Health")
-	void HandleDeath();
-
-	// May need to add more functions
-	// UFUNCTION(BlueprintNativeEvent, Category = "Health")
-	// float GetCurrentHealth(); const;
-
-	// UFUNCTION(BlueprintNativeEvent, Category = "Health")
-	// bool IsAlive() const;
+	virtual void ReceiveDamage(float DamageAmount) = 0;
+	virtual void HandleDeath() = 0;
 };

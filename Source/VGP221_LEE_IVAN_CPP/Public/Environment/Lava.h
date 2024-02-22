@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
+#include "Player/FPSCharacter.h"
 #include "GameFramework/DamageType.h"
 #include "Lava.generated.h"
 

@@ -1,20 +1,21 @@
 #pragma once
 
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/DamageType.h"
-#include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
-#include "Projectiles/FPSProjectile.h"
-#include "Kismet/GameplayStatics.h"
 #include "Gamemode/FPSGamemode.h"
 #include "HealthComponent/HealthComponent.h"
+#include "Interfaces/IDamageable.h"
 #include "Interfaces/IDetectable.h"
+#include "Kismet/GameplayStatics.h"
+#include "Projectiles/FPSProjectile.h"
 #include "FPSCharacter.generated.h"
 
 
 UCLASS()
-class VGP221_LEE_IVAN_CPP_API AFPSCharacter : public ACharacter, public IIDetectable
+class VGP221_LEE_IVAN_CPP_API AFPSCharacter : public ACharacter, public IIDetectable, public IIDamageable
 {
 	GENERATED_BODY()
 
@@ -63,7 +64,9 @@ private:
 	UFUNCTION()
 	void Fire();
 
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	// IDamageable interface implementation
+	void ReceiveDamage(float DamageAmount) override;
+	void HandleDeath() override;
 
 	// IDetectable interface implementation
 	bool IsPlayerDetected_Implementation() override;
