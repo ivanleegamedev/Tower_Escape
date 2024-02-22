@@ -39,7 +39,7 @@ void ABasicTurret::BeginPlay()
 	
 	check(GEngine != nullptr)
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Spawning Turret")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Spawning Turret")));
 
 	HealthComponent->OnDeathEvent.AddDynamic(this, &ABasicTurret::OnTurretDeath);
 
