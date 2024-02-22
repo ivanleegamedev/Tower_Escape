@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/DamageType.h"
 #include "Gamemode/FPSGamemode.h"
 #include "HealthComponent/HealthComponent.h"

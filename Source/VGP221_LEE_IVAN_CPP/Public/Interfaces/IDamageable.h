@@ -18,7 +18,8 @@ class VGP221_LEE_IVAN_CPP_API IIDamageable
 	GENERATED_BODY()
 
 public:
-
+	UFUNCTION()
 	virtual void ReceiveDamage(float DamageAmount) = 0;
+	UFUNCTION()
 	virtual void HandleDeath() = 0;
 };

@@ -7,6 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Player/FPSCharacter.h"
 #include "GameFramework/DamageType.h"
+#include "Interfaces/IDamageable.h"
 #include "Lava.generated.h"
 
 UCLASS()
@@ -32,7 +33,7 @@ public:
 
 	// Damage per second
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-	float DamagePerSecond = 10.0f;
+	float LavaDamage = 10.0f;
 
 	// Function to handle the overlap event
 	UFUNCTION()
@@ -42,8 +43,8 @@ public:
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	FTimerHandle DamageTimerHandle;
+	IIDamageable* ActorInLava = nullptr;
 
+	UFUNCTION()
 	void ApplyDamage();
-
-	AActor* ActorInLava = nullptr;
 };
