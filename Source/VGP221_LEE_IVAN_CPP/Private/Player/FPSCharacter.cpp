@@ -145,6 +145,7 @@ void AFPSCharacter::OnCharacterDeath()
 {
 	// Call Game Over Screen
 	DisableInput(Cast<APlayerController>(GetController()));
+
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Character has died!")));
 }
 
