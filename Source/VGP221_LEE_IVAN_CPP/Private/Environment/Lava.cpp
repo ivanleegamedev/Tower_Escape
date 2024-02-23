@@ -6,8 +6,6 @@ ALava::ALava()
 
 	TriggerVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerVolume"));
 	RootComponent = TriggerVolume;
-	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ALava::OnOverlapBegin);
-	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &ALava::OnOverlapEnd);
 
 	LavaMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LavaMesh"));
 	LavaMesh->SetupAttachment(GetRootComponent());
@@ -17,6 +15,8 @@ void ALava::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ALava::OnOverlapBegin);
+	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &ALava::OnOverlapEnd);
 }
 
 void ALava::Tick(float DeltaTime)
