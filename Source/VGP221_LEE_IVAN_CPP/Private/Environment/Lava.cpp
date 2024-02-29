@@ -21,22 +21,16 @@ ALava::ALava()
 
 void ALava::BeginPlay()
 {
-	Super::BeginPlay();
-	
-
+	Super::BeginPlay();	
 }
 
 void ALava::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ALava::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	// debug on screen for the overlap event
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
-
 	IIDamageable* DamageableActor = Cast<IIDamageable>(OtherActor);
 	if (DamageableActor)
 	{
@@ -47,9 +41,6 @@ void ALava::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 
 void ALava::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	// debug on screen for the overlap event
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap End"));
-
 	if (Cast<IIDamageable>(OtherActor) == ActorInLava)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(DamageTimerHandle);
