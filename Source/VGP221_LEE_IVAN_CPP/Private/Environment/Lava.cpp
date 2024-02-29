@@ -3,20 +3,27 @@
 ALava::ALava()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	
+	if (!TriggerVolume)
+	{
+		TriggerVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerVolume"));
+		RootComponent = TriggerVolume;
+		TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ALava::OnOverlapBegin);
+		TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &ALava::OnOverlapEnd);
+	}
 
-	TriggerVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerVolume"));
-	RootComponent = TriggerVolume;
-
-	LavaMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LavaMesh"));
-	LavaMesh->SetupAttachment(GetRootComponent());
+	if (!LavaMesh)
+	{
+		LavaMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LavaMesh"));
+		LavaMesh->SetupAttachment(GetRootComponent());
+	}
 }
 
 void ALava::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ALava::OnOverlapBegin);
-	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &ALava::OnOverlapEnd);
+
 }
 
 void ALava::Tick(float DeltaTime)
