@@ -6,31 +6,55 @@ ABasicTurret::ABasicTurret()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	SetRootComponent(Root);
+	if (!Root)
+	{
+		Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+		SetRootComponent(Root);
+	}
 
-	TurretMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("TurretMesh"));
-	TurretMesh->SetupAttachment(Root);
+	if (!TurretMesh)
+	{
+		TurretMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("TurretMesh"));
+		TurretMesh->SetupAttachment(Root);
+	}
 
-	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	if (!HealthComponent)
+	{
+		HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	}
 
-	Beam = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RadarBeam"));
-	Beam->SetupAttachment(TurretMesh, TEXT("BeamSocket"));
+	if (!Beam)
+	{
+		Beam = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RadarBeam"));
+		Beam->SetupAttachment(TurretMesh, TEXT("BeamSocket"));
+	}
 
-	BeamScanTarget1 = CreateDefaultSubobject<USceneComponent>(TEXT("BeamScanTarget1"));
-	BeamScanTarget1->SetupAttachment(Root);
+	if (!BeamScanTarget1)
+	{
+		BeamScanTarget1 = CreateDefaultSubobject<USceneComponent>(TEXT("BeamScanTarget1"));
+		BeamScanTarget1->SetupAttachment(Root);
+	}
 
-	BeamScanTarget2 = CreateDefaultSubobject<USceneComponent>(TEXT("BeamScanTarget2"));
-	BeamScanTarget2->SetupAttachment(Root);
+	if (!BeamScanTarget2)
+	{
+		BeamScanTarget2 = CreateDefaultSubobject<USceneComponent>(TEXT("BeamScanTarget2"));
+		BeamScanTarget2->SetupAttachment(Root);
+	}
 
-	BeamTarget = CreateDefaultSubobject<USceneComponent>(TEXT("BeamTarget"));
-	BeamTarget->SetupAttachment(Root);
+	if (!BeamTarget)
+	{
+		BeamTarget = CreateDefaultSubobject<USceneComponent>(TEXT("BeamTarget"));
+		BeamTarget->SetupAttachment(Root);
+	}
 
 	SetBeamLength(BeamLength);
 
-	P_MuzzleFlash = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MuzzleFlash"));
-	P_MuzzleFlash->SetupAttachment(TurretMesh, TEXT("BeamSocket"));
-	P_MuzzleFlash->SetAutoActivate(false);
+	if (!P_MuzzleFlash)
+	{
+		P_MuzzleFlash = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MuzzleFlash"));
+		P_MuzzleFlash->SetupAttachment(TurretMesh, TEXT("BeamSocket"));
+		P_MuzzleFlash->SetAutoActivate(false);
+	}
 }
 
 void ABasicTurret::BeginPlay()

@@ -64,6 +64,9 @@ private:
 	UFUNCTION()
 	void Fire();
 
+	UFUNCTION()
+	void PauseGame();
+
 	// IDamageable interface implementation
 	void ReceiveDamage(float DamageAmount) override;
 	void HandleDeath() override;

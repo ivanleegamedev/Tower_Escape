@@ -6,6 +6,14 @@
 #include "Components/TextBlock.h"
 #include "ButtonWidget.generated.h"
 
+UENUM(BlueprintType)
+enum class EButtonActionType : uint8
+{
+	Restart UMETA(DisplayName = "Restart"),
+	MainMenu UMETA(DisplayName = "Main Menu"),
+	Quit UMETA(DisplayName = "Quit"),
+};
+
 /**
  * 
  */
@@ -21,9 +29,10 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ButtonText;
 
-	int num = -1;
+	EButtonActionType ButtonActionType;
+
 	UFUNCTION()
-	void SetText(int value);
+	void InitializeButton(const FString& InButtonText, EButtonActionType InActionType);
 
 	UFUNCTION()
 	void OnButtonClick();

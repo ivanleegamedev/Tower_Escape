@@ -2,10 +2,8 @@
 
 void AFPSGamemode::StartPlay()
 {
-	Super::StartPlay(); // Calls base function similar to the base function in Unity.
+	Super::StartPlay();
 
-	// C Assert
-	// If this fails throw an error
 	check(GEngine != nullptr)
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Starting FPS Map")));
 
@@ -14,17 +12,52 @@ void AFPSGamemode::StartPlay()
 
 void AFPSGamemode::ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass)
 {
-	// 1. If we have one, remove it
 	if (CurrentWidget != nullptr)
 	{
 		CurrentWidget->RemoveFromParent();
 		CurrentWidget = nullptr;
 	}
 
-	// 2. If we don't have one, add it to the viewport
 	if (UserWidgetPrefab != nullptr)
 	{
 		CurrentWidget = CreateWidget<UFPSUserWidget>(GetWorld(), NewWidgetClass);
 		CurrentWidget->AddToViewport();
 	}
+}
+
+void AFPSGamemode::TogglePauseMenu()
+{
+    APlayerController* PC = GetWorld()->GetFirstPlayerController();
+    if (PC)
+    {
+        bool bIsCurrentlyPaused = UGameplayStatics::IsGamePaused(GetWorld());
+        UGameplayStatics::SetGamePaused(GetWorld(), !bIsCurrentlyPaused);
+
+        // Show or hide the pause menu based on the game's new pause state.
+        if (bIsCurrentlyPaused)
+        {
+            // Game is now unpaused, so hide the pause menu.
+            if (CurrentPauseMenuWidget)
+            {
+                CurrentPauseMenuWidget->RemoveFromViewport();
+                CurrentPauseMenuWidget = nullptr; // Clear the reference.
+            }
+            PC->bShowMouseCursor = false;
+            PC->SetInputMode(FInputModeGameOnly());
+        }
+        else
+        {
+            // Game is now paused, so show the pause menu.
+            if (!CurrentPauseMenuWidget && PauseMenuPrefab)
+            {
+                CurrentPauseMenuWidget = CreateWidget<UPauseMenuWidget>(PC, PauseMenuPrefab);
+                if (CurrentPauseMenuWidget)
+                {
+                    CurrentPauseMenuWidget->AddToViewport();
+                    PC->bShowMouseCursor = true;
+                    PC->SetInputMode(FInputModeUIOnly());
+                }
+            }
+        }
+    }
 }

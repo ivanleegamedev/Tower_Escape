@@ -23,10 +23,10 @@ public:
 	UProgressBar* HealthBar; // Make sure that "HealthBar" name matches the name of the HealthBar in the Widget
 
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* ScoreText; // Make sure that "ScoreText" name matches the name of the HealthBar in the Widget
+	UTextBlock* ScoreText; // Make sure that "ScoreText" name matches the name of the Text in the Widget
 
 	UPROPERTY(meta = (BindWidget))
-	UVerticalBox* ButtonContainer; // Make sure that "ButtonContainer" name matches the name of the HealthBar in the Widget
+	UVerticalBox* ButtonContainer; // Make sure that "ButtonContainer" name matches the name of the VerticalBox in the Widget
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UButtonWidget> ButtonWidgetPrefab;

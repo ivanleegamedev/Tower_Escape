@@ -14,16 +14,22 @@ AFPSCharacter::AFPSCharacter()
 
 	UE_LOG(LogTemp, Warning, TEXT("Constructor Called from FPSCharacter"));
 
-	FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
-	check(FPSMesh != nullptr);
-	FPSMesh->SetOnlyOwnerSee(true);
-	FPSMesh->SetupAttachment(FPSCameraComponent);
-	FPSMesh->bCastDynamicShadow = false;
-	FPSMesh->CastShadow = false;
+	if (!FPSMesh)
+	{
+		FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
+		check(FPSMesh != nullptr);
+		FPSMesh->SetOnlyOwnerSee(true);
+		FPSMesh->SetupAttachment(FPSCameraComponent);
+		FPSMesh->bCastDynamicShadow = false;
+		FPSMesh->CastShadow = false;
 
-	GetMesh()->SetOwnerNoSee(true);
+		GetMesh()->SetOwnerNoSee(true);
+	}
 
-	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	if (!HealthComponent)
+	{
+		HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	}
 }
 
 void AFPSCharacter::BeginPlay()
@@ -53,6 +59,7 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AFPSCharacter::StartJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AFPSCharacter::EndJump);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AFPSCharacter::Fire);
+	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &AFPSCharacter::PauseGame);
 }
 
 void AFPSCharacter::MoveForward(float value)
@@ -119,6 +126,15 @@ void AFPSCharacter::Fire()
 	}
 }
 
+void AFPSCharacter::PauseGame()
+{
+	AFPSGamemode* FPSGamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (FPSGamemode)
+	{
+		FPSGamemode->TogglePauseMenu();
+	}
+}
+
 void AFPSCharacter::ReceiveDamage(float DamageAmount)
 {
 	if (HealthComponent)
@@ -143,8 +159,11 @@ void AFPSCharacter::UpdateHealthUI(float NewHealthPercentage)
 
 void AFPSCharacter::OnCharacterDeath()
 {
-	// Call Game Over Screen
-	DisableInput(Cast<APlayerController>(GetController()));
+	// Destroy Actor
+	Destroy();
+
+	// TODO: Call Game Over Screen
+	//DisableInput(Cast<APlayerController>(GetController()));
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Character has died!")));
 }
