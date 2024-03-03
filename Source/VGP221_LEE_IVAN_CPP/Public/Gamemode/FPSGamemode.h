@@ -44,8 +44,8 @@ public:
 	void HidePauseMenu();
 
 	UFUNCTION()
-	void EnablePauseInput(APlayerController* PC);
+	void InitializeGameInput();
 
 	UFUNCTION()
-	void DisablePauseInput(APlayerController* PC);
+	void InitializeUIControl();
 };

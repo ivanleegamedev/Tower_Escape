@@ -1,4 +1,5 @@
 #include "GUI/ButtonWidget.h"
+#include "Gamemode/FPSGamemode.h"
 
 void UButtonWidget::InitializeButton(const FString& InButtonText, EButtonActionType InActionType)
 {
@@ -11,23 +12,25 @@ void UButtonWidget::InitializeButton(const FString& InButtonText, EButtonActionT
 
 void UButtonWidget::OnButtonClick()
 {
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	if (!PC) return;
+
+	AFPSGamemode* GM = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
+
 	switch (ButtonActionType)
 	{
 	case EButtonActionType::Resume:
-		// Resume Game
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Resume Button Clicked")));
+		if (GM) GM->TogglePauseMenu();
 		break;
 	case EButtonActionType::Restart:
-		// Restart Game by restarting level
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Restart Button Clicked")));
+		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 		break;
 	case EButtonActionType::MainMenu:
 		// Go to Main Menu
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("MainMenu Button Clicked")));
 		break;
 	case EButtonActionType::Quit:
-		// Quit Game
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Quit Button Clicked")));
+		UKismetSystemLibrary::QuitGame(GetWorld(), PC, EQuitPreference::Quit, true);
 		break;
 	}
 }

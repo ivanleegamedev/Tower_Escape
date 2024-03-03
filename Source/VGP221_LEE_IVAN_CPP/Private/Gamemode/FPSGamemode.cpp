@@ -22,6 +22,7 @@ void AFPSGamemode::ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass)
 	{
 		CurrentWidget = CreateWidget<UFPSUserWidget>(GetWorld(), NewWidgetClass);
 		CurrentWidget->AddToViewport();
+		InitializeGameInput();
 	}
 }
 
@@ -36,7 +37,7 @@ void AFPSGamemode::TogglePauseMenu()
 	if (bIsCurrentlyPaused)
 	{
 		HidePauseMenu();
-		DisableInput(PC);
+		InitializeGameInput();
 	}
 	else
 	{
@@ -52,7 +53,7 @@ void AFPSGamemode::ShowPauseMenu(APlayerController* PC)
 		if (CurrentPauseMenuWidget)
 		{
 			CurrentPauseMenuWidget->AddToViewport();
-			EnableInput(PC);
+			InitializeUIControl();
 		}
 	}
 }
@@ -66,20 +67,22 @@ void AFPSGamemode::HidePauseMenu()
 	}
 }
 
-void AFPSGamemode::EnablePauseInput(APlayerController* PC)
+void AFPSGamemode::InitializeGameInput()
 {
-	if (PC)
-	{
-		PC->bShowMouseCursor = true;
-		PC->SetInputMode(FInputModeUIOnly());
-	}
-}
-
-void AFPSGamemode::DisablePauseInput(APlayerController* PC)
-{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	if (PC)
 	{
 		PC->bShowMouseCursor = false;
 		PC->SetInputMode(FInputModeGameOnly());
+	}
+}
+
+void AFPSGamemode::InitializeUIControl()
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	if (PC)
+	{
+		PC->bShowMouseCursor = true;
+		PC->SetInputMode(FInputModeUIOnly());
 	}
 }
