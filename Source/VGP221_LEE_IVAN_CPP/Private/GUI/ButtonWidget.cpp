@@ -19,6 +19,9 @@ void UButtonWidget::OnButtonClick()
 
 	switch (ButtonActionType)
 	{
+	case EButtonActionType::Start:
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Start Button Clicked")));
+		break;
 	case EButtonActionType::Resume:
 		if (GM) GM->TogglePauseMenu();
 		break;

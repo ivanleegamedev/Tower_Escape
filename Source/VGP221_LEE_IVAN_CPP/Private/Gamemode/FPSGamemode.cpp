@@ -7,7 +7,24 @@ void AFPSGamemode::StartPlay()
 	check(GEngine != nullptr)
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Starting FPS Map")));
 
+	//InitializeMainMenu(MainMenuPrefab);
 	ChangeMenuWidget(UserWidgetPrefab);
+}
+
+void AFPSGamemode::InitializeMainMenu(TSubclassOf<UMainMenuWidget> NewWidgetClass)
+{
+	if (MainMenuWidget != nullptr)
+	{
+		MainMenuWidget->RemoveFromParent();
+		MainMenuWidget = nullptr;
+	}
+
+	if (MainMenuPrefab != nullptr)
+	{
+		MainMenuWidget = CreateWidget<UMainMenuWidget>(GetWorld(), NewWidgetClass);
+		MainMenuWidget->AddToViewport();
+		InitializeUIControl();
+	}
 }
 
 void AFPSGamemode::ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass)

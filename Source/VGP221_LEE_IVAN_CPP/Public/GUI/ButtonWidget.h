@@ -10,6 +10,7 @@
 UENUM(BlueprintType)
 enum class EButtonActionType : uint8
 {
+	Start UMETA(DisplayName = "Start"),
 	Resume UMETA(DisplayName = "Resume"),
 	Restart UMETA(DisplayName = "Restart"),
 	MainMenu UMETA(DisplayName = "Main Menu"),

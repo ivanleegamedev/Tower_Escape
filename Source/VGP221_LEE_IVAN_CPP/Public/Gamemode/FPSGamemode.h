@@ -4,6 +4,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "Logging/StructuredLog.h"
 #include "Kismet/GameplayStatics.h"
+#include "GUI/MainMenuWidget.h"
 #include "GUI/FPSUserWidget.h"
 #include "GUI/PauseMenuWidget.h"
 #include "FPSGamemode.generated.h"
@@ -20,16 +21,25 @@ public:
 	virtual void StartPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GUI")
+	TSubclassOf<UMainMenuWidget> MainMenuPrefab;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GUI")
 	TSubclassOf<UFPSUserWidget> UserWidgetPrefab;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GUI")
 	TSubclassOf<UPauseMenuWidget> PauseMenuPrefab;
 
 	UPROPERTY()
+	UMainMenuWidget* MainMenuWidget;
+
+	UPROPERTY()
 	UFPSUserWidget* CurrentWidget;
 	
 	UPROPERTY()
 	UPauseMenuWidget* CurrentPauseMenuWidget;
+
+	UFUNCTION()
+	void InitializeMainMenu(TSubclassOf<UMainMenuWidget> NewWidgetClass);
 
 	UFUNCTION()
 	void ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass);
