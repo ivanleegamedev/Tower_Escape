@@ -25,15 +25,27 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GUI")
 	TSubclassOf<UPauseMenuWidget> PauseMenuPrefab;
 
+	UPROPERTY()
+	UFPSUserWidget* CurrentWidget;
+	
+	UPROPERTY()
+	UPauseMenuWidget* CurrentPauseMenuWidget;
+
 	UFUNCTION()
 	void ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass);
 
 	UFUNCTION()
 	void TogglePauseMenu();
 
-	UPROPERTY()
-	UFPSUserWidget* CurrentWidget;
-	
-	UPROPERTY()
-	UPauseMenuWidget* CurrentPauseMenuWidget;
+	UFUNCTION()
+	void ShowPauseMenu(APlayerController* PC);
+
+	UFUNCTION()
+	void HidePauseMenu();
+
+	UFUNCTION()
+	void EnablePauseInput(APlayerController* PC);
+
+	UFUNCTION()
+	void DisablePauseInput(APlayerController* PC);
 };

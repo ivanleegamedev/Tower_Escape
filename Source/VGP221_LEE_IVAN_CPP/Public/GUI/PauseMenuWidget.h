@@ -4,6 +4,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
+#include "GUI/ButtonWidget.h"
 #include "PauseMenuWidget.generated.h"
 
 /**

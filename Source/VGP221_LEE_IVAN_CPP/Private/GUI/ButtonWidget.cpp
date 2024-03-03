@@ -13,6 +13,10 @@ void UButtonWidget::OnButtonClick()
 {
 	switch (ButtonActionType)
 	{
+	case EButtonActionType::Resume:
+		// Resume Game
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Resume Button Clicked")));
+		break;
 	case EButtonActionType::Restart:
 		// Restart Game by restarting level
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Restart Button Clicked")));
