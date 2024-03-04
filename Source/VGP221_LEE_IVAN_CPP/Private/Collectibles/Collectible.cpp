@@ -25,6 +25,8 @@ void ACollectible::Tick(float DeltaTime)
 void ACollectible::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	OnCollect();
+	// Disable Collision
+	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void ACollectible::OnCollect()

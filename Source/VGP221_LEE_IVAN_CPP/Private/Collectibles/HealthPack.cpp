@@ -31,6 +31,8 @@ void AHealthPack::OnCollect()
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("HealthPack OnCollect Called")));
 
+	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 	AFPSCharacter* PlayerCharacter = Cast<AFPSCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
 	if (PlayerCharacter && PlayerCharacter->HealthComponent)
 	{
