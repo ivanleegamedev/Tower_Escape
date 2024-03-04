@@ -129,10 +129,9 @@ void AFPSCharacter::Fire()
 void AFPSCharacter::PauseGame()
 {
 	AFPSGamemode* FPSGamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (FPSGamemode)
-	{
-		FPSGamemode->TogglePauseMenu();
-	}
+	if (!FPSGamemode) return;
+
+	FPSGamemode->ShowWidget(FPSGamemode->PauseMenuPrefab, false);	
 }
 
 void AFPSCharacter::ReceiveDamage(float DamageAmount)
@@ -151,9 +150,12 @@ void AFPSCharacter::HandleDeath()
 void AFPSCharacter::UpdateHealthUI(float NewHealthPercentage)
 {
 	AFPSGamemode* FPSGamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (FPSGamemode && FPSGamemode->CurrentWidget)
+	if (!FPSGamemode || !FPSGamemode->CurrentWidget) return;
+
+	// Directly check and cast the CurrentWidget to UFPSUserWidget
+	if (UFPSUserWidget* HUDWidget = Cast<UFPSUserWidget>(FPSGamemode->CurrentWidget))
 	{
-		FPSGamemode->CurrentWidget->SetHealthBar(NewHealthPercentage);
+		HUDWidget->SetHealthBar(NewHealthPercentage);
 	}
 }
 
@@ -162,8 +164,10 @@ void AFPSCharacter::OnCharacterDeath()
 	// Destroy Actor
 	Destroy();
 
-	// TODO: Call Game Over Screen
-	//DisableInput(Cast<APlayerController>(GetController()));
+	AFPSGamemode* FPSGamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (!FPSGamemode) return;
+
+	FPSGamemode->ShowWidget(FPSGamemode->GameOverPrefab, false);
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Character has died!")));
 }

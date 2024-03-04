@@ -26,7 +26,7 @@ public:
 	TSubclassOf<UMainMenuWidget> MainMenuPrefab;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GUI")
-	TSubclassOf<UFPSUserWidget> UserWidgetPrefab;
+	TSubclassOf<UFPSUserWidget> UserHUDPrefab;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GUI")
 	TSubclassOf<UPauseMenuWidget> PauseMenuPrefab;
@@ -38,10 +38,13 @@ public:
 	TSubclassOf<ULevelCompleteWidget> LevelCompletePrefab;
 
 	UPROPERTY()
+	UUserWidget* CurrentWidget;
+
+	UPROPERTY()
 	UMainMenuWidget* MainMenuWidget;
 
 	UPROPERTY()
-	UFPSUserWidget* FPSUserWidget;
+	UFPSUserWidget* UserHUDWidget;
 	
 	UPROPERTY()
 	UPauseMenuWidget* PauseMenuWidget;
@@ -53,23 +56,8 @@ public:
 	ULevelCompleteWidget* LevelCompleteWidget;
 
 	UFUNCTION()
-	void InitializeMainMenu(TSubclassOf<UMainMenuWidget> NewWidgetClass);
+	void ShowWidget(TSubclassOf<UUserWidget> NewWidgetClass, bool bGameInputMode);
 
 	UFUNCTION()
-	void ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass);
-
-	UFUNCTION()
-	void TogglePauseMenu();
-
-	UFUNCTION()
-	void ShowPauseMenu(APlayerController* PC);
-
-	UFUNCTION()
-	void HidePauseMenu();
-
-	UFUNCTION()
-	void InitializeModeGameOnly();
-
-	UFUNCTION()
-	void InitializeModeUIOnly();
+	void CleanupWidgets();
 };

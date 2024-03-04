@@ -16,6 +16,8 @@ class VGP221_LEE_IVAN_CPP_API UGameOverWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	virtual void NativeConstruct() override;
+
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* GameOverText; // Make sure that "GameOverText" name matches the name of the Text in the Widget
 

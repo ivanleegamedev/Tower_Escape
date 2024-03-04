@@ -30,9 +30,12 @@ void ACoin::OnCollect()
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Coin OnCollect Called")));
 
 	AFPSGamemode* Gamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (Gamemode)
+	if (!Gamemode || !Gamemode->CurrentWidget) return;
+
+	// Assuming SetScore is a method within UFPSUserWidget
+	if (UFPSUserWidget* HUDWidget = Cast<UFPSUserWidget>(Gamemode->CurrentWidget))
 	{
-		Gamemode->CurrentWidget->SetScore(Points);
+		HUDWidget->SetScore(Points);
 	}
 
 	GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &ACoin::DeathTimerComplete, 0.5f, false);

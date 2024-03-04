@@ -16,6 +16,8 @@ class VGP221_LEE_IVAN_CPP_API ULevelCompleteWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	virtual void NativeConstruct() override;
+
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* LevelCompleteText; // Make sure that "LevelCompleteText" name matches the name of the Text in the Widget
 
