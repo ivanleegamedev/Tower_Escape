@@ -239,13 +239,16 @@ void ABasicTurret::OnTurretDeath()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Turret has been destroyed!")));
 
-	AFPSGamemode* Gamemode = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (!Gamemode || !Gamemode->CurrentWidget) return;
+	AFPSGamemode* GM = Cast<AFPSGamemode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GM)
+	{
+		GM->TurretDestroyed();
+	}
 
 	// Assuming SetScore is a method within UFPSUserWidget
-	if (UFPSUserWidget* HUDWidget = Cast<UFPSUserWidget>(Gamemode->CurrentWidget))
+	if (UFPSUserWidget* HUDWidget = Cast<UFPSUserWidget>(GM->CurrentWidget))
 	{
-		HUDWidget->SetScore(KillCount);
+		HUDWidget->SetScore(ScoreCount);
 	}
 
 	Destroy();

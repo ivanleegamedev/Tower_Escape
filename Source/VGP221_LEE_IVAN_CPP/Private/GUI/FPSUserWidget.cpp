@@ -6,6 +6,7 @@ void UFPSUserWidget::NativeConstruct()
 
 	SetHealthBar(1.0f);
 	SetScore(0);
+	SetTurretCount(0, 0);
 }
 
 void UFPSUserWidget::SetHealthBar(float percentage)
@@ -22,4 +23,13 @@ void UFPSUserWidget::SetScore(int newScore)
 
 	UIScore += newScore;
 	ScoreText->SetText(FText::FromString("Score: " + FString::FromInt(UIScore)));
+}
+
+void UFPSUserWidget::SetTurretCount(int Remaining, int Total)
+{
+	if (TurretCountText)
+	{
+		FString TurretText = FString::Printf(TEXT("Turrets Remaining: %d/%d"), Remaining, Total);
+		TurretCountText->SetText(FText::FromString(TurretText));
+	}
 }

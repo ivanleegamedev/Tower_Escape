@@ -18,9 +18,25 @@ UCLASS()
 class VGP221_LEE_IVAN_CPP_API AFPSGamemode : public AGameModeBase
 {
 	GENERATED_BODY()
+
+private:
+	UPROPERTY()
+	int TotalTurrets = 0;
+
+	UPROPERTY()
+	int TurretsRemaining = 0;
 	
 public:
 	virtual void StartPlay() override;
+
+	UFUNCTION()
+	void InitializeTurretCount();
+
+	UFUNCTION()
+	void TurretDestroyed();
+
+	UFUNCTION()
+	void UpdateTurretCountUI();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GUI")
 	TSubclassOf<UMainMenuWidget> MainMenuPrefab;

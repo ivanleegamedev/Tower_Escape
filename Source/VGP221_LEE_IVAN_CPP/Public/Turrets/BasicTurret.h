@@ -37,7 +37,7 @@ public:
 	UHealthComponent* HealthComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float KillCount = 1;
+	float ScoreCount = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float TurretDamageAmount = 10.0f;

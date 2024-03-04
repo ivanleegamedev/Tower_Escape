@@ -26,6 +26,9 @@ public:
 	UTextBlock* ScoreText; // Make sure that "ScoreText" name matches the name of the Text in the Widget
 
 	UPROPERTY(meta = (BindWidget))
+	UTextBlock* TurretCountText; // Make sure that "TurretCountText" name matches the name of the Text in the Widget
+
+	UPROPERTY(meta = (BindWidget))
 	UVerticalBox* ButtonContainer; // Make sure that "ButtonContainer" name matches the name of the VerticalBox in the Widget
 
 	UPROPERTY(EditAnywhere)
@@ -36,6 +39,9 @@ public:
 
 	UFUNCTION()
 	void SetScore(int newScore);
+
+	UFUNCTION()
+	void SetTurretCount(int Remaining, int Total);
 
 private:
 	UPROPERTY()
