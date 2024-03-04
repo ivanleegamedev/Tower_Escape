@@ -7,6 +7,8 @@
 #include "GUI/MainMenuWidget.h"
 #include "GUI/FPSUserWidget.h"
 #include "GUI/PauseMenuWidget.h"
+#include "GUI/GameOverWidget.h"
+#include "GUI/LevelCompleteWidget.h"
 #include "FPSGamemode.generated.h"
 
 /**
@@ -29,14 +31,26 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GUI")
 	TSubclassOf<UPauseMenuWidget> PauseMenuPrefab;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GUI")
+	TSubclassOf<UGameOverWidget> GameOverPrefab;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GUI")
+	TSubclassOf<ULevelCompleteWidget> LevelCompletePrefab;
+
 	UPROPERTY()
 	UMainMenuWidget* MainMenuWidget;
 
 	UPROPERTY()
-	UFPSUserWidget* CurrentWidget;
+	UFPSUserWidget* FPSUserWidget;
 	
 	UPROPERTY()
-	UPauseMenuWidget* CurrentPauseMenuWidget;
+	UPauseMenuWidget* PauseMenuWidget;
+
+	UPROPERTY()
+	UGameOverWidget* GameOverWidget;
+
+	UPROPERTY()
+	ULevelCompleteWidget* LevelCompleteWidget;
 
 	UFUNCTION()
 	void InitializeMainMenu(TSubclassOf<UMainMenuWidget> NewWidgetClass);
@@ -54,8 +68,8 @@ public:
 	void HidePauseMenu();
 
 	UFUNCTION()
-	void InitializeGameInput();
+	void InitializeModeGameOnly();
 
 	UFUNCTION()
-	void InitializeUIControl();
+	void InitializeModeUIOnly();
 };

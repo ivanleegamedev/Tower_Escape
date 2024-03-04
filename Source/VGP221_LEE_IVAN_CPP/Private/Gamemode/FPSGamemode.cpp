@@ -7,8 +7,8 @@ void AFPSGamemode::StartPlay()
 	check(GEngine != nullptr)
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Starting FPS Map")));
 
-	//InitializeMainMenu(MainMenuPrefab);
-	ChangeMenuWidget(UserWidgetPrefab);
+	InitializeMainMenu(MainMenuPrefab);
+	//ChangeMenuWidget(UserWidgetPrefab);
 }
 
 void AFPSGamemode::InitializeMainMenu(TSubclassOf<UMainMenuWidget> NewWidgetClass)
@@ -23,23 +23,23 @@ void AFPSGamemode::InitializeMainMenu(TSubclassOf<UMainMenuWidget> NewWidgetClas
 	{
 		MainMenuWidget = CreateWidget<UMainMenuWidget>(GetWorld(), NewWidgetClass);
 		MainMenuWidget->AddToViewport();
-		InitializeUIControl();
+		InitializeModeUIOnly();
 	}
 }
 
 void AFPSGamemode::ChangeMenuWidget(TSubclassOf<UFPSUserWidget> NewWidgetClass)
 {
-	if (CurrentWidget != nullptr)
+	if (FPSUserWidget != nullptr)
 	{
-		CurrentWidget->RemoveFromParent();
-		CurrentWidget = nullptr;
+		FPSUserWidget->RemoveFromParent();
+		FPSUserWidget = nullptr;
 	}
 
 	if (UserWidgetPrefab != nullptr)
 	{
-		CurrentWidget = CreateWidget<UFPSUserWidget>(GetWorld(), NewWidgetClass);
-		CurrentWidget->AddToViewport();
-		InitializeGameInput();
+		FPSUserWidget = CreateWidget<UFPSUserWidget>(GetWorld(), NewWidgetClass);
+		FPSUserWidget->AddToViewport();
+		InitializeModeGameOnly();
 	}
 }
 
@@ -54,7 +54,7 @@ void AFPSGamemode::TogglePauseMenu()
 	if (bIsCurrentlyPaused)
 	{
 		HidePauseMenu();
-		InitializeGameInput();
+		InitializeModeGameOnly();
 	}
 	else
 	{
@@ -64,27 +64,27 @@ void AFPSGamemode::TogglePauseMenu()
 
 void AFPSGamemode::ShowPauseMenu(APlayerController* PC)
 {
-	if (!CurrentPauseMenuWidget && PauseMenuPrefab)
+	if (!PauseMenuWidget && PauseMenuPrefab)
 	{
-		CurrentPauseMenuWidget = CreateWidget<UPauseMenuWidget>(PC, PauseMenuPrefab);
-		if (CurrentPauseMenuWidget)
+		PauseMenuWidget = CreateWidget<UPauseMenuWidget>(PC, PauseMenuPrefab);
+		if (PauseMenuWidget)
 		{
-			CurrentPauseMenuWidget->AddToViewport();
-			InitializeUIControl();
+			PauseMenuWidget->AddToViewport();
+			InitializeModeUIOnly();
 		}
 	}
 }
 
 void AFPSGamemode::HidePauseMenu()
 {
-	if (CurrentPauseMenuWidget)
+	if (PauseMenuWidget)
 	{
-		CurrentPauseMenuWidget->RemoveFromParent();
-		CurrentPauseMenuWidget = nullptr;
+		PauseMenuWidget->RemoveFromParent();
+		PauseMenuWidget = nullptr;
 	}
 }
 
-void AFPSGamemode::InitializeGameInput()
+void AFPSGamemode::InitializeModeGameOnly()
 {
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	if (PC)
@@ -94,7 +94,7 @@ void AFPSGamemode::InitializeGameInput()
 	}
 }
 
-void AFPSGamemode::InitializeUIControl()
+void AFPSGamemode::InitializeModeUIOnly()
 {
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	if (PC)
