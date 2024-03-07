@@ -67,8 +67,8 @@ void ABasicTurret::BeginPlay()
 
 	HealthComponent->OnDeathEvent.AddDynamic(this, &ABasicTurret::OnTurretDeath);
 
-	GetWorldTimerManager().SetTimer(ScanTimerHandler, this, &ABasicTurret::BeamScanTarget, ChangeTargetDelay, true, 1.0f);
-	GetWorldTimerManager().SetTimer(TraceTimerHandler, this, &ABasicTurret::TraceBeam, 0.1f, true, 0.1f);
+	GetWorldTimerManager().SetTimer(ScanTimerHandler, this, &ABasicTurret::BeamScanTarget, ChangeTargetDelay, true, InitialRotationDelay);
+	GetWorldTimerManager().SetTimer(TraceTimerHandler, this, &ABasicTurret::TraceBeam, BeamTraceDelay, true);
 }
 
 void ABasicTurret::Tick(float DeltaTime)
@@ -123,8 +123,8 @@ void ABasicTurret::BeamScanTarget()
 
 void ABasicTurret::SetBeamLength(float Length)
 {
-	Beam->SetRelativeScale3D(FVector(Length / 400, Beam->GetRelativeScale3D().Y, Beam->GetRelativeScale3D().Z));
-	Beam->SetRelativeLocation(FVector(Length / (-8), 0, 0));
+	Beam->SetRelativeScale3D(FVector(Length / BeamLengthOffset, Beam->GetRelativeScale3D().Y, Beam->GetRelativeScale3D().Z));
+	Beam->SetRelativeLocation(FVector(Length / BeamStartOffset, 0, 0));
 }
 
 void ABasicTurret::TraceBeam()
@@ -164,7 +164,7 @@ void ABasicTurret::CheckPlayerInSight(AActor* HitActor)
 				Player = HitActor;
 
 				// Start Shooting
-				GetWorldTimerManager().SetTimer(ShootTimerHandler, this, &ABasicTurret::Shoot, 0.75f, true, 0.1f);
+				GetWorldTimerManager().SetTimer(ShootTimerHandler, this, &ABasicTurret::Shoot, TimeBetweenShots, true, TimeBeforeShotOnTargetFound);
 				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("BasicTurret Has Player In Sight")));
 			}
 		}		
@@ -185,7 +185,7 @@ void ABasicTurret::FollowPlayer(float DeltaTime)
 
 	FRotator RotationToPlayer = UKismetMathLibrary::FindLookAtRotation(Start, End);
 
-	LookAtRotation = FMath::RInterpTo(LookAtRotation, RotationToPlayer, DeltaTime, 100.0f);
+	LookAtRotation = FMath::RInterpTo(LookAtRotation, RotationToPlayer, DeltaTime, 10000.0f);
 
 	if (TurretMesh->GetAnimInstance()->Implements<UITurretAnimation>())
 	{

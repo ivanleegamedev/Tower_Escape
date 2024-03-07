@@ -79,7 +79,25 @@ private:
 	float ChangeTargetDelay = 5.0f;
 
 	UPROPERTY(EditAnywhere)
+	float InitialRotationDelay = 1.0f;
+
+	UPROPERTY(EditAnywhere)
+	float BeamTraceDelay = 0.1f;
+
+	UPROPERTY(EditAnywhere)
 	float RotationRateMultiplier = 1.0f;
+
+	UPROPERTY(EditAnywhere)
+	float BeamLengthOffset = 400.0f;
+
+	UPROPERTY(EditAnywhere)
+	float BeamStartOffset = -8.0f;
+
+	UPROPERTY(EditAnywhere)
+	float TimeBetweenShots = 0.75f;
+
+	UPROPERTY(EditAnywhere)
+	float TimeBeforeShotOnTargetFound = 0.1f;
 
 	UPROPERTY()
 	AActor* Player = nullptr;
