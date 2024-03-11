@@ -185,7 +185,7 @@ void ABasicTurret::FollowPlayer(float DeltaTime)
 
 	FRotator RotationToPlayer = UKismetMathLibrary::FindLookAtRotation(Start, End);
 
-	LookAtRotation = FMath::RInterpTo(LookAtRotation, RotationToPlayer, DeltaTime, 10000.0f);
+	LookAtRotation = FMath::RInterpTo(LookAtRotation, RotationToPlayer, DeltaTime, 100.0f);
 
 	if (TurretMesh->GetAnimInstance()->Implements<UITurretAnimation>())
 	{
